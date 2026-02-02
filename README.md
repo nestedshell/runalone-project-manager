@@ -22,7 +22,9 @@ The plugin combines the essential features of **Kanban** with a lightweight, int
 
 The goal is simple: **reduce chaos, increase clarity**, and let you focus on what truly matters—moving your projects forward in a sustainable and productive way.
 
-<img src="screenshots/1.png" width="300"> <img src="screenshots/2.png" width="300"> <img src="screenshots/3.png" width="300">
+<img src="screenshots/1.png" width="600">
+<img src="screenshots/2.png" width="600">
+<img src="screenshots/3.png" width="600">
 
 ## Features
 
