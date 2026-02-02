@@ -134,4 +134,4 @@ See the [LICENSE](LICENSE) file for details.
 
 ---
 
-*Built with focus, for those who build alone.*
+*Built for solo builders with busy brains.*
