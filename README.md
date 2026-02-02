@@ -10,7 +10,7 @@ If you're a solo developer, maker, or innovator, your needs are different. You n
 
 For those who use Obsidian as their central hub for thinking and organizing, the lack of a native, integrated project management solution has always been a limitation.
 
-And if you're someone who juggles many tasks at once—especially if you deal with ADHD or have a highly technical mindset—scattered task management can quickly lead to cognitive overload.
+And if you're someone who juggles many projects at once—especially if you deal with ADHD (which is a feature and not a bug) or have a highly technical mindset—scattered task management can quickly lead to cognitive overload.
 
 ## The Solution
 
