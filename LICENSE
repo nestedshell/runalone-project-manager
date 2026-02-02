@@ -1,0 +1,36 @@
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2025 nestedshell
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+---
+
+ADDITIONAL NON-COMMERCIAL CLAUSE
+
+In addition to the terms of the GPL-3.0, the following restriction applies:
+
+This software and any derivatives may NOT be used for commercial purposes
+without explicit written permission from the author. Commercial purposes
+include, but are not limited to:
+
+- Selling the software or derivatives
+- Using the software as part of a paid service or product
+- Using the software in a commercial organization for profit-generating activities
+
+For commercial licensing inquiries, please contact the author.
+
+This additional clause is intended to protect the open-source nature of the
+project while preventing unauthorized commercial exploitation.

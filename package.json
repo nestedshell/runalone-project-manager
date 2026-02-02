@@ -1,0 +1,26 @@
+{
+	"name": "obsidian-timeline-gantt",
+	"version": "1.0.0",
+	"description": "Visual project management with interactive Gantt timeline",
+	"main": "main.js",
+	"scripts": {
+		"dev": "node esbuild.config.mjs",
+		"build": "node esbuild.config.mjs production"
+	},
+	"keywords": [
+		"obsidian",
+		"plugin",
+		"gantt",
+		"timeline",
+		"project-management"
+	],
+	"author": "nestedshell",
+	"license": "GPL-3.0",
+	"devDependencies": {
+		"@types/node": "^16.11.6",
+		"builtin-modules": "^3.3.0",
+		"esbuild": "0.17.3",
+		"obsidian": "latest",
+		"typescript": "5.0.4"
+	}
+}

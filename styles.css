@@ -1,0 +1,814 @@
+/* Timeline Gantt Plugin Styles */
+
+.timeline-gantt-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+}
+
+.timeline-toolbar-container {
+	flex-shrink: 0;
+	padding: 8px 12px;
+	border-bottom: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+}
+
+.timeline-content-container {
+	flex: 1;
+	overflow: auto;
+	background: var(--background-primary);
+}
+
+.timeline-svg-container {
+	min-width: fit-content;
+	min-height: fit-content;
+}
+
+/* Toolbar Styles */
+.gantt-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.toolbar-section {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.toolbar-left {
+	justify-content: flex-start;
+}
+
+.toolbar-center {
+	justify-content: center;
+	flex: 1;
+}
+
+.toolbar-right {
+	justify-content: flex-end;
+}
+
+.toolbar-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	border-radius: 4px;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.toolbar-button:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.toolbar-button:active {
+	background: var(--background-modifier-active-hover);
+}
+
+.toolbar-button.is-disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.toolbar-button.is-disabled:hover {
+	background: transparent;
+	color: var(--text-muted);
+}
+
+.toolbar-separator {
+	width: 1px;
+	height: 20px;
+	background: var(--background-modifier-border);
+	margin: 0 8px;
+}
+
+/* Zoom Controller Styles */
+.zoom-controller {
+	display: flex;
+	align-items: center;
+}
+
+.zoom-button-group {
+	display: flex;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.zoom-button {
+	padding: 4px 12px;
+	border: none;
+	background: var(--background-primary);
+	color: var(--text-muted);
+	font-size: 12px;
+	font-weight: 500;
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.zoom-button:not(:last-child) {
+	border-right: 1px solid var(--background-modifier-border);
+}
+
+.zoom-button:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.zoom-button.is-active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.zoom-button.is-active:hover {
+	background: var(--interactive-accent-hover);
+}
+
+/* Export Dropdown */
+.toolbar-dropdown {
+	position: absolute;
+	top: 100%;
+	right: 0;
+	margin-top: 4px;
+	padding: 4px;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	z-index: 100;
+}
+
+.toolbar-dropdown.hidden {
+	display: none;
+}
+
+.dropdown-item {
+	display: block;
+	width: 100%;
+	padding: 8px 16px;
+	border: none;
+	background: transparent;
+	color: var(--text-normal);
+	font-size: 13px;
+	text-align: left;
+	cursor: pointer;
+	border-radius: 4px;
+	transition: background 0.15s ease;
+}
+
+.dropdown-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+/* SVG Gantt Styles */
+.gantt-svg {
+	font-family: var(--font-interface);
+}
+
+.gantt-svg text {
+	user-select: none;
+}
+
+.task-bar:hover {
+	filter: brightness(1.1);
+}
+
+/* Project Header Styles */
+.project-header:hover {
+	filter: brightness(1.1);
+}
+
+.project-name {
+	cursor: pointer;
+}
+
+.project-name:hover {
+	fill: var(--text-accent) !important;
+	text-decoration: underline;
+}
+
+.project-drag-handle {
+	opacity: 0.5;
+}
+
+.project-drag-handle:hover {
+	opacity: 1;
+}
+
+.gantt-svg.is-reordering-project {
+	user-select: none;
+}
+
+.project-drag-indicator {
+	pointer-events: none;
+}
+
+.task-bar-group:hover .resize-handle {
+	fill: rgba(255, 255, 255, 0.2);
+}
+
+.collapse-icon {
+	cursor: pointer;
+}
+
+/* Task Label Styles */
+.task-label {
+	cursor: pointer;
+}
+
+.task-label:hover {
+	fill: var(--text-accent) !important;
+}
+
+/* Drag Handle Styles */
+.drag-handle {
+	opacity: 0.3;
+	cursor: grab;
+}
+
+.drag-handle:hover {
+	opacity: 1;
+	fill: var(--text-accent) !important;
+}
+
+.drag-handle.hidden-handle {
+	opacity: 0 !important;
+}
+
+.drag-handle.hidden-handle:hover {
+	fill: transparent !important;
+}
+
+/* Task Action Buttons */
+.task-delete-btn,
+.task-indent-btn,
+.task-outdent-btn {
+	opacity: 0.3;
+	cursor: pointer;
+}
+
+.task-delete-btn:hover {
+	opacity: 1;
+	fill: var(--text-error) !important;
+}
+
+.task-indent-btn:hover,
+.task-outdent-btn:hover {
+	opacity: 1;
+	fill: var(--text-accent) !important;
+}
+
+.gantt-svg.is-reordering .drag-handle {
+	cursor: grabbing;
+}
+
+/* Drag Indicator */
+.drag-indicator {
+	pointer-events: none;
+}
+
+/* Row highlight during drag */
+.gantt-svg.is-reordering {
+	user-select: none;
+}
+
+/* Task Edit Modal */
+.task-edit-modal {
+	padding: 10px;
+}
+
+.task-edit-modal h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.task-edit-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.task-edit-buttons button {
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.task-edit-buttons button.mod-cta {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+}
+
+.task-edit-buttons button.mod-cta:hover {
+	background: var(--interactive-accent-hover);
+}
+
+/* Project Edit Modal */
+.project-edit-modal {
+	padding: 10px;
+}
+
+.project-edit-modal h2 {
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.project-edit-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+	margin-top: 20px;
+	padding-top: 15px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.project-edit-buttons button {
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.project-edit-buttons button.mod-cta {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	border: none;
+}
+
+.project-edit-buttons button.mod-cta:hover {
+	background: var(--interactive-accent-hover);
+}
+
+.project-edit-buttons button.mod-warning {
+	background: var(--text-error);
+	color: white;
+	border: none;
+}
+
+.project-edit-buttons button.mod-warning:hover {
+	background: #c0392b;
+}
+
+/* Project Icon Selector */
+.project-icon-selector {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	padding: 10px;
+	margin-top: 5px;
+	margin-bottom: 15px;
+	background: var(--background-secondary);
+	border-radius: 6px;
+	max-height: 120px;
+	overflow-y: auto;
+}
+
+.project-icon-option {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	font-size: 18px;
+	border-radius: 4px;
+	cursor: pointer;
+	border: 2px solid transparent;
+}
+
+.project-icon-option:hover {
+	background: var(--background-modifier-hover);
+}
+
+.project-icon-option.is-selected {
+	background: var(--interactive-accent);
+	border-color: var(--interactive-accent);
+}
+
+/* Scrollbar Styling */
+.timeline-content-container::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.timeline-content-container::-webkit-scrollbar-track {
+	background: var(--background-secondary);
+}
+
+.timeline-content-container::-webkit-scrollbar-thumb {
+	background: var(--background-modifier-border-hover);
+	border-radius: 4px;
+}
+
+.timeline-content-container::-webkit-scrollbar-thumb:hover {
+	background: var(--text-muted);
+}
+
+.timeline-content-container::-webkit-scrollbar-corner {
+	background: var(--background-secondary);
+}
+
+/* Theme Support */
+.theme-dark .gantt-svg rect[fill="var(--background-primary)"] {
+	fill: var(--background-primary);
+}
+
+.theme-light .gantt-svg rect[fill="var(--background-primary)"] {
+	fill: var(--background-primary);
+}
+
+/* Print Styles */
+@media print {
+	.timeline-toolbar-container {
+		display: none;
+	}
+
+	.timeline-content-container {
+		overflow: visible;
+	}
+}
+
+/* Animation for drag */
+@keyframes pulse {
+	0%, 100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0.7;
+	}
+}
+
+.dragging .task-bar {
+	animation: pulse 0.5s ease-in-out infinite;
+}
+
+/* Settings Tab Styles */
+.setting-item-description pre {
+	margin: 8px 0 0 0;
+	overflow-x: auto;
+}
+
+/* Empty State */
+.timeline-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	padding: 40px;
+	text-align: center;
+	color: var(--text-muted);
+}
+
+.timeline-empty h3 {
+	margin: 0 0 8px 0;
+	color: var(--text-normal);
+}
+
+.timeline-empty p {
+	margin: 0 0 16px 0;
+}
+
+.timeline-empty button {
+	padding: 8px 16px;
+	border: none;
+	border-radius: 4px;
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+	cursor: pointer;
+}
+
+.timeline-empty button:hover {
+	background: var(--interactive-accent-hover);
+}
+
+/* ========================================
+   TOOLBAR LOGO
+   ======================================== */
+.toolbar-logo {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin-right: 12px;
+}
+
+.toolbar-logo-svg {
+	color: var(--interactive-accent);
+}
+
+.toolbar-logo-text {
+	font-weight: 700;
+	font-size: 15px;
+	color: var(--text-normal);
+}
+
+/* ========================================
+   VIEW TOGGLE (Minimal)
+   ======================================== */
+.view-toggle {
+	display: flex;
+	align-items: center;
+	background: var(--background-modifier-border);
+	border-radius: 6px;
+	padding: 2px;
+}
+
+.view-tab {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 30px;
+	height: 26px;
+	border: none;
+	border-radius: 4px;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.view-tab:hover {
+	color: var(--text-normal);
+}
+
+.view-tab.active {
+	background: var(--background-primary);
+	color: var(--text-normal);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.view-tab svg {
+	flex-shrink: 0;
+}
+
+/* ========================================
+   KANBAN VIEW
+   ======================================== */
+.timeline-kanban-container {
+	height: 100%;
+	padding: 16px;
+	overflow: auto;
+}
+
+.kanban-board {
+	display: flex;
+	gap: 16px;
+	height: 100%;
+	min-height: 400px;
+}
+
+/* Kanban Column */
+.kanban-column {
+	flex: 0 0 280px;
+	display: flex;
+	flex-direction: column;
+	background: var(--background-secondary);
+	border-radius: 10px;
+	border: 1px solid var(--background-modifier-border);
+	max-height: 100%;
+	transition: all 0.2s ease;
+}
+
+.kanban-column.drop-target {
+	background: var(--background-modifier-hover);
+	border-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px var(--interactive-accent);
+}
+
+/* Kanban Header */
+.kanban-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 14px 16px;
+	border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.kanban-dot {
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	flex-shrink: 0;
+}
+
+.kanban-title {
+	font-weight: 600;
+	font-size: 14px;
+	color: var(--text-normal);
+	flex: 1;
+}
+
+.kanban-count {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 24px;
+	height: 24px;
+	padding: 0 8px;
+	background: var(--background-modifier-border);
+	border-radius: 12px;
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--text-muted);
+}
+
+/* Kanban Cards Container */
+.kanban-cards {
+	flex: 1;
+	overflow-y: auto;
+	padding: 12px;
+}
+
+/* Kanban Card */
+.kanban-card {
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	padding: 12px;
+	margin-bottom: 10px;
+	cursor: grab;
+	transition: all 0.15s ease;
+	border-left: 3px solid var(--background-modifier-border);
+}
+
+.kanban-card:last-child {
+	margin-bottom: 0;
+}
+
+.kanban-card:hover {
+	border-color: var(--interactive-accent);
+	border-left-color: var(--interactive-accent);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+	transform: translateY(-1px);
+}
+
+.kanban-card.selected {
+	border-color: var(--interactive-accent);
+	border-left-color: var(--interactive-accent);
+	box-shadow: 0 0 0 2px var(--interactive-accent-hover);
+}
+
+.kanban-card.dragging {
+	opacity: 0.4;
+	cursor: grabbing;
+}
+
+/* Card Badge (Project) */
+.kanban-badge {
+	font-size: 10px;
+	font-weight: 600;
+	color: var(--text-muted);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-bottom: 6px;
+}
+
+/* Card Title */
+.kanban-card-title {
+	font-size: 13px;
+	font-weight: 500;
+	color: var(--text-normal);
+	line-height: 1.4;
+	margin-bottom: 8px;
+}
+
+.milestone-icon {
+	color: var(--text-accent);
+	margin-right: 4px;
+}
+
+/* Card Meta */
+.kanban-meta {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.kanban-meta-item {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 11px;
+	color: var(--text-muted);
+}
+
+.kanban-meta-item svg {
+	opacity: 0.7;
+}
+
+/* Kanban Scrollbar */
+.kanban-cards::-webkit-scrollbar {
+	width: 6px;
+}
+
+.kanban-cards::-webkit-scrollbar-track {
+	background: transparent;
+}
+
+.kanban-cards::-webkit-scrollbar-thumb {
+	background: var(--background-modifier-border-hover);
+	border-radius: 3px;
+}
+
+.kanban-cards::-webkit-scrollbar-thumb:hover {
+	background: var(--text-muted);
+}
+
+/* ========================================
+   LINKED NOTE INPUT
+   ======================================== */
+.note-input-container {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	position: relative;
+}
+
+.note-search-input {
+	flex: 1;
+	padding: 6px 10px;
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-size: 14px;
+	min-width: 200px;
+}
+
+.note-search-input:focus {
+	border-color: var(--interactive-accent);
+	outline: none;
+}
+
+.note-suggestions {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 40px;
+	margin-top: 4px;
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	z-index: 1000;
+	max-height: 200px;
+	overflow-y: auto;
+}
+
+.note-suggestion-item {
+	padding: 8px 12px;
+	cursor: pointer;
+	font-size: 13px;
+	color: var(--text-normal);
+}
+
+.note-suggestion-item:hover {
+	background: var(--background-modifier-hover);
+}
+
+.note-suggestion-item:first-child {
+	border-radius: 6px 6px 0 0;
+}
+
+.note-suggestion-item:last-child {
+	border-radius: 0 0 6px 6px;
+}
+
+.note-open-btn,
+.note-clear-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	padding: 0;
+	border: none;
+	border-radius: 4px;
+	background: var(--background-modifier-hover);
+	color: var(--text-muted);
+	cursor: pointer;
+	transition: all 0.15s ease;
+}
+
+.note-open-btn:hover {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.note-clear-btn:hover {
+	background: var(--text-error);
+	color: white;
+}
