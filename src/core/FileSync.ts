@@ -580,9 +580,12 @@ export class FileSync {
 			const name = updates.name || 'Project';
 			let header = `## ${icon} ${name}`;
 
-			// Add linkedNote if present
+			// Add linkedNote if present (quote if contains spaces)
 			if (updates.linkedNote) {
-				header += ` @note:${updates.linkedNote}`;
+				const noteRef = updates.linkedNote.includes(' ')
+					? `"${updates.linkedNote}"`
+					: updates.linkedNote;
+				header += ` @note:${noteRef}`;
 			}
 
 			lines[lineIndex] = header;

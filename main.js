@@ -114,9 +114,9 @@ function generateProjectId(index) {
 var START_DATE_REGEX = /^@start:\s*(\d{4}-\d{2}-\d{2})/m;
 var PROJECT_HEADER_REGEX = /^##\s+(.+)$/;
 var PROJECT_ICON_REGEX = /^([\p{Emoji_Presentation}\p{Extended_Pictographic}])\s*(.+)$/u;
-var PROJECT_NOTE_REGEX = /@note:(\S+)/;
+var PROJECT_NOTE_REGEX = /@note:(?:"([^"]+)"|(\S+))/;
 var TASK_REGEX = /^(>+)\s+(.+?)\s*\((\d+)\)(.*)$/;
-var MODIFIER_REGEX = /@(\w+)(?::([^\s@]+))?/g;
+var MODIFIER_REGEX = /@(\w+)(?::(?:"([^"]+)"|([^\s@]+)))?/g;
 var Parser = class {
   parse(content) {
     const lines = content.split("\n");
@@ -135,7 +135,7 @@ var Parser = class {
         let linkedNote;
         const noteMatch = headerContent.match(PROJECT_NOTE_REGEX);
         if (noteMatch) {
-          linkedNote = noteMatch[1];
+          linkedNote = noteMatch[1] || noteMatch[2];
           headerContent = headerContent.replace(PROJECT_NOTE_REGEX, "").trim();
         }
         const iconMatch = headerContent.match(PROJECT_ICON_REGEX);
@@ -205,7 +205,8 @@ var Parser = class {
     let linkedNote;
     let match;
     while ((match = MODIFIER_REGEX.exec(str)) !== null) {
-      const [, key, value] = match;
+      const [, key, quotedValue, unquotedValue] = match;
+      const value = quotedValue || unquotedValue;
       switch (key) {
         case "after":
           if (value) {
@@ -275,7 +276,8 @@ var Parser = class {
       line += ` @color:${task.color.replace("#", "")}`;
     }
     if (task.linkedNote) {
-      line += ` @note:${task.linkedNote}`;
+      const noteRef = task.linkedNote.includes(" ") ? `"${task.linkedNote}"` : task.linkedNote;
+      line += ` @note:${noteRef}`;
     }
     return line;
   }
@@ -1127,7 +1129,8 @@ var FileSync = class {
       const name = updates.name || "Project";
       let header = `## ${icon} ${name}`;
       if (updates.linkedNote) {
-        header += ` @note:${updates.linkedNote}`;
+        const noteRef = updates.linkedNote.includes(" ") ? `"${updates.linkedNote}"` : updates.linkedNote;
+        header += ` @note:${noteRef}`;
       }
       lines[lineIndex] = header;
       const updatedContent = lines.join("\n");
@@ -3672,12 +3675,14 @@ var TimelineView = class extends import_obsidian4.ItemView {
     }
     return null;
   }
-  async handleOpenLinkedNote(notePath) {
-    const file = this.app.vault.getAbstractFileByPath(notePath) || this.app.vault.getAbstractFileByPath(notePath + ".md");
+  async handleOpenLinkedNote(noteName) {
+    const file = this.app.vault.getMarkdownFiles().find(
+      (f) => f.basename === noteName
+    );
     if (file) {
-      await this.app.workspace.openLinkText(notePath, "", false);
+      await this.app.workspace.openLinkText(file.path, "", false);
     } else {
-      new import_obsidian4.Notice(`Note not found: ${notePath}`);
+      new import_obsidian4.Notice(`Note not found: ${noteName}`);
     }
   }
   updateSettings(settings) {

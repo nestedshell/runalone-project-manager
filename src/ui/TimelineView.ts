@@ -831,15 +831,16 @@ export class TimelineView extends ItemView {
 		return null;
 	}
 
-	private async handleOpenLinkedNote(notePath: string): Promise<void> {
-		// Try to find and open the file
-		const file = this.app.vault.getAbstractFileByPath(notePath)
-			|| this.app.vault.getAbstractFileByPath(notePath + '.md');
+	private async handleOpenLinkedNote(noteName: string): Promise<void> {
+		// Find the file by basename (since linkedNote stores only the basename)
+		const file = this.app.vault.getMarkdownFiles().find(
+			f => f.basename === noteName
+		);
 
 		if (file) {
-			await this.app.workspace.openLinkText(notePath, '', false);
+			await this.app.workspace.openLinkText(file.path, '', false);
 		} else {
-			new Notice(`Note not found: ${notePath}`);
+			new Notice(`Note not found: ${noteName}`);
 		}
 	}
 

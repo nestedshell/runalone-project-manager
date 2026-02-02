@@ -4,10 +4,10 @@ const START_DATE_REGEX = /^@start:\s*(\d{4}-\d{2}-\d{2})/m;
 const PROJECT_HEADER_REGEX = /^##\s+(.+)$/;
 // Regex to extract emoji icon at the start of project name
 const PROJECT_ICON_REGEX = /^([\p{Emoji_Presentation}\p{Extended_Pictographic}])\s*(.+)$/u;
-// Regex to extract @note from project header
-const PROJECT_NOTE_REGEX = /@note:(\S+)/;
+// Regex to extract @note from project header (supports quoted names with spaces)
+const PROJECT_NOTE_REGEX = /@note:(?:"([^"]+)"|(\S+))/;
 const TASK_REGEX = /^(>+)\s+(.+?)\s*\((\d+)\)(.*)$/;
-const MODIFIER_REGEX = /@(\w+)(?::([^\s@]+))?/g;
+const MODIFIER_REGEX = /@(\w+)(?::(?:"([^"]+)"|([^\s@]+)))?/g;
 
 export class Parser {
 	parse(content: string): ParseResult {
@@ -34,8 +34,9 @@ export class Parser {
 				let linkedNote: string | undefined;
 				const noteMatch = headerContent.match(PROJECT_NOTE_REGEX);
 				if (noteMatch) {
-					linkedNote = noteMatch[1];
-					// Remove @note:xxx from headerContent
+					// noteMatch[1] is quoted name, noteMatch[2] is unquoted name
+					linkedNote = noteMatch[1] || noteMatch[2];
+					// Remove @note:xxx or @note:"xxx" from headerContent
 					headerContent = headerContent.replace(PROJECT_NOTE_REGEX, '').trim();
 				}
 
@@ -126,7 +127,8 @@ export class Parser {
 
 		let match;
 		while ((match = MODIFIER_REGEX.exec(str)) !== null) {
-			const [, key, value] = match;
+			const [, key, quotedValue, unquotedValue] = match;
+			const value = quotedValue || unquotedValue;
 			switch (key) {
 				case 'after':
 					if (value) {
@@ -204,7 +206,10 @@ export class Parser {
 		}
 
 		if (task.linkedNote) {
-			line += ` @note:${task.linkedNote}`;
+			const noteRef = task.linkedNote.includes(' ')
+				? `"${task.linkedNote}"`
+				: task.linkedNote;
+			line += ` @note:${noteRef}`;
 		}
 
 		return line;
