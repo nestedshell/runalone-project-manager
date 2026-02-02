@@ -1,4 +1,4 @@
-# Runalone Projects
+# Runalone Project Manager
 
 A minimalist project management plugin for Obsidian, designed for solo developers, makers, inventors, and independent creators.
 
@@ -21,6 +21,8 @@ No cloud. No accounts. No external services. Everything stays local, in plain te
 The plugin combines the essential features of **Kanban** with a lightweight, intuitive **Gantt Chart**, giving you both an operational and temporal view of your work. Plan tasks, visualize dependencies, and distribute your workload over time—all in a clear, ordered, and coherent way.
 
 The goal is simple: **reduce chaos, increase clarity**, and let you focus on what truly matters—moving your projects forward in a sustainable and productive way.
+
+<img src="screenshots/1.png" width="300"> <img src="screenshots/2.png" width="300"> <img src="screenshots/3.png" width="300">
 
 ## Features
 
