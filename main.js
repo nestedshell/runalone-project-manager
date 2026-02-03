@@ -1806,6 +1806,18 @@ var GanttRenderer = class {
       });
     }
     group.appendChild(taskGroup);
+    const isCompleted = task.status === "done" || task.isDone;
+    const isCancelled = task.status === "cancelled";
+    const taskNameLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    taskNameLabel.setAttribute("x", String(x + width + 6));
+    taskNameLabel.setAttribute("y", String(y + height / 2 + 4));
+    taskNameLabel.setAttribute("fill", isCompleted || isCancelled ? "var(--text-faint)" : "var(--text-muted)");
+    taskNameLabel.setAttribute("font-size", "10");
+    taskNameLabel.setAttribute("class", "task-bar-label");
+    taskNameLabel.setAttribute("pointer-events", "none");
+    const displayName = task.title.length > 30 ? task.title.substring(0, 27) + "..." : task.title;
+    taskNameLabel.textContent = displayName;
+    group.appendChild(taskNameLabel);
   }
   renderMilestone(group, task, x, y, state) {
     const size = 10;
@@ -1829,6 +1841,18 @@ var GanttRenderer = class {
       diamond.addEventListener("click", () => this.onTaskClick(task.id));
     }
     group.appendChild(diamond);
+    const isCompleted = task.status === "done" || task.isDone;
+    const isCancelled = task.status === "cancelled";
+    const milestoneLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+    milestoneLabel.setAttribute("x", String(x + size + 6));
+    milestoneLabel.setAttribute("y", String(y + 4));
+    milestoneLabel.setAttribute("fill", isCompleted || isCancelled ? "var(--text-faint)" : "var(--text-muted)");
+    milestoneLabel.setAttribute("font-size", "10");
+    milestoneLabel.setAttribute("class", "milestone-label");
+    milestoneLabel.setAttribute("pointer-events", "none");
+    const displayName = task.title.length > 30 ? task.title.substring(0, 27) + "..." : task.title;
+    milestoneLabel.textContent = displayName;
+    group.appendChild(milestoneLabel);
   }
   renderDependencies(state) {
     const depsGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
@@ -2621,11 +2645,17 @@ var Toolbar = class {
   renderLogo(container) {
     const logo = container.createDiv({ cls: "toolbar-logo" });
     logo.innerHTML = `
-			<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-				<circle cx="12" cy="5" r="3.5"/>
-				<polygon points="12,10 5,22 19,22"/>
+			<svg width="20" height="20" viewBox="0 0 100 100" fill="#8b5cf6" stroke="#8b5cf6">
+				<circle cx="50" cy="40" r="22"/>
+				<circle cx="42" cy="38" r="3" fill="#ffffff"/>
+				<circle cx="58" cy="38" r="3" fill="#ffffff"/>
+				<path d="M35 58 C25 65, 25 80, 35 85" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M45 60 C40 70, 42 85, 45 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M50 60 C50 72, 50 85, 50 92" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M55 60 C58 70, 58 85, 55 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M65 58 C75 65, 75 80, 65 85" fill="none" stroke-width="6" stroke-linecap="round"/>
 			</svg>
-			<span>Runalone</span>
+			<span><strong>Runalone</strong> Project Manager</span>
 		`;
   }
   renderViewToggle(container, currentMode) {
@@ -3061,7 +3091,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
     return VIEW_TYPE_TIMELINE;
   }
   getDisplayText() {
-    return "Runalone Projects";
+    return "Runalone Project Manager";
   }
   getIcon() {
     return "runalone";
@@ -3726,7 +3756,7 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Runalone Projects Settings" });
+    containerEl.createEl("h2", { text: "Runalone Project Manager Settings" });
     new import_obsidian5.Setting(containerEl).setName("Projects file path").setDesc("Path to the markdown file containing your projects (relative to vault root)").addText(
       (text) => text.setPlaceholder("Projects.md").setValue(this.plugin.settings.projectsFilePath).onChange(async (value) => {
         this.plugin.settings.projectsFilePath = value;
@@ -3805,9 +3835,15 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
 };
 
 // main.ts
-var RUNALONE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-  <circle cx="12" cy="5" r="4"/>
-  <polygon points="12,10 4,22 20,22"/>
+var RUNALONE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor" stroke="currentColor">
+  <circle cx="50" cy="40" r="22"/>
+  <circle cx="42" cy="38" r="3" fill="var(--background-primary, #fff)"/>
+  <circle cx="58" cy="38" r="3" fill="var(--background-primary, #fff)"/>
+  <path d="M35 58 C25 65, 25 80, 35 85" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M45 60 C40 70, 42 85, 45 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M50 60 C50 72, 50 85, 50 92" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M55 60 C58 70, 58 85, 55 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M65 58 C75 65, 75 80, 65 85" fill="none" stroke-width="6" stroke-linecap="round"/>
 </svg>`;
 var TimelineGanttPlugin = class extends import_obsidian6.Plugin {
   constructor() {
@@ -3821,12 +3857,12 @@ var TimelineGanttPlugin = class extends import_obsidian6.Plugin {
       VIEW_TYPE_TIMELINE,
       (leaf) => new TimelineView(leaf, this.settings)
     );
-    this.addRibbonIcon("runalone", "Open Runalone Projects", () => {
+    this.addRibbonIcon("runalone", "Open Runalone Project Manager", () => {
       this.activateView();
     });
     this.addCommand({
       id: "open-runalone-projects",
-      name: "Open Runalone Projects",
+      name: "Open Runalone Project Manager",
       callback: () => {
         this.activateView();
       }

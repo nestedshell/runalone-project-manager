@@ -6,10 +6,16 @@ import {
 	DEFAULT_SETTINGS,
 } from './src/settings/SettingsTab';
 
-// Simple stick figure: circle head + triangle body
-const RUNALONE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-  <circle cx="12" cy="5" r="4"/>
-  <polygon points="12,10 4,22 20,22"/>
+// Stylized octopus with two dot eyes (gray for ribbon, uses currentColor)
+const RUNALONE_ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="currentColor" stroke="currentColor">
+  <circle cx="50" cy="40" r="22"/>
+  <circle cx="42" cy="38" r="3" fill="var(--background-primary, #fff)"/>
+  <circle cx="58" cy="38" r="3" fill="var(--background-primary, #fff)"/>
+  <path d="M35 58 C25 65, 25 80, 35 85" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M45 60 C40 70, 42 85, 45 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M50 60 C50 72, 50 85, 50 92" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M55 60 C58 70, 58 85, 55 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+  <path d="M65 58 C75 65, 75 80, 65 85" fill="none" stroke-width="6" stroke-linecap="round"/>
 </svg>`;
 
 export default class TimelineGanttPlugin extends Plugin {
@@ -25,13 +31,13 @@ export default class TimelineGanttPlugin extends Plugin {
 			(leaf) => new TimelineView(leaf, this.settings)
 		);
 
-		this.addRibbonIcon('runalone', 'Open Runalone Projects', () => {
+		this.addRibbonIcon('runalone', 'Open Runalone Project Manager', () => {
 			this.activateView();
 		});
 
 		this.addCommand({
 			id: 'open-runalone-projects',
-			name: 'Open Runalone Projects',
+			name: 'Open Runalone Project Manager',
 			callback: () => {
 				this.activateView();
 			},

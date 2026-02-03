@@ -789,6 +789,21 @@ export class GanttRenderer {
 		}
 
 		group.appendChild(taskGroup);
+
+		// Task name label next to the bar
+		const isCompleted = task.status === 'done' || task.isDone;
+		const isCancelled = task.status === 'cancelled';
+		const taskNameLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+		taskNameLabel.setAttribute('x', String(x + width + 6));
+		taskNameLabel.setAttribute('y', String(y + height / 2 + 4));
+		taskNameLabel.setAttribute('fill', (isCompleted || isCancelled) ? 'var(--text-faint)' : 'var(--text-muted)');
+		taskNameLabel.setAttribute('font-size', '10');
+		taskNameLabel.setAttribute('class', 'task-bar-label');
+		taskNameLabel.setAttribute('pointer-events', 'none');
+		// Truncate long names
+		const displayName = task.title.length > 30 ? task.title.substring(0, 27) + '...' : task.title;
+		taskNameLabel.textContent = displayName;
+		group.appendChild(taskNameLabel);
 	}
 
 	private renderMilestone(
@@ -822,6 +837,21 @@ export class GanttRenderer {
 		}
 
 		group.appendChild(diamond);
+
+		// Milestone name label next to the diamond
+		const isCompleted = task.status === 'done' || task.isDone;
+		const isCancelled = task.status === 'cancelled';
+		const milestoneLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+		milestoneLabel.setAttribute('x', String(x + size + 6));
+		milestoneLabel.setAttribute('y', String(y + 4));
+		milestoneLabel.setAttribute('fill', (isCompleted || isCancelled) ? 'var(--text-faint)' : 'var(--text-muted)');
+		milestoneLabel.setAttribute('font-size', '10');
+		milestoneLabel.setAttribute('class', 'milestone-label');
+		milestoneLabel.setAttribute('pointer-events', 'none');
+		// Truncate long names
+		const displayName = task.title.length > 30 ? task.title.substring(0, 27) + '...' : task.title;
+		milestoneLabel.textContent = displayName;
+		group.appendChild(milestoneLabel);
 	}
 
 	private renderDependencies(state: TimelineState): void {

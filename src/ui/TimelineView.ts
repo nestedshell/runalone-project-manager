@@ -66,7 +66,7 @@ export class TimelineView extends ItemView {
 	}
 
 	getDisplayText(): string {
-		return 'Runalone Projects';
+		return 'Runalone Project Manager';
 	}
 
 	getIcon(): string {

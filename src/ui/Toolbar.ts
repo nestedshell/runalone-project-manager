@@ -70,11 +70,17 @@ export class Toolbar {
 	private renderLogo(container: HTMLElement): void {
 		const logo = container.createDiv({ cls: 'toolbar-logo' });
 		logo.innerHTML = `
-			<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-				<circle cx="12" cy="5" r="3.5"/>
-				<polygon points="12,10 5,22 19,22"/>
+			<svg width="20" height="20" viewBox="0 0 100 100" fill="#8b5cf6" stroke="#8b5cf6">
+				<circle cx="50" cy="40" r="22"/>
+				<circle cx="42" cy="38" r="3" fill="#ffffff"/>
+				<circle cx="58" cy="38" r="3" fill="#ffffff"/>
+				<path d="M35 58 C25 65, 25 80, 35 85" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M45 60 C40 70, 42 85, 45 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M50 60 C50 72, 50 85, 50 92" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M55 60 C58 70, 58 85, 55 90" fill="none" stroke-width="6" stroke-linecap="round"/>
+				<path d="M65 58 C75 65, 75 80, 65 85" fill="none" stroke-width="6" stroke-linecap="round"/>
 			</svg>
-			<span>Runalone</span>
+			<span><strong>Runalone</strong> Project Manager</span>
 		`;
 	}
 

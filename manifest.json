@@ -1,6 +1,6 @@
 {
 	"id": "runalone-projects",
-	"name": "Runalone Projects",
+	"name": "Runalone Project Manager",
 	"version": "1.0.0",
 	"minAppVersion": "1.0.0",
 	"description": "Visual project management with interactive Gantt timeline and Kanban board based on plain text files",
