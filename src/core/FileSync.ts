@@ -25,7 +25,7 @@ export class FileSync {
 		this.callbacks = callbacks;
 	}
 
-	async watchFile(filePath: string): Promise<void> {
+	watchFile(filePath: string): void {
 		const file = this.app.vault.getAbstractFileByPath(filePath);
 		if (file instanceof TFile) {
 			this.watchedFile = file;
@@ -125,14 +125,12 @@ export class FileSync {
 		}
 	}
 
-	async updateTaskStartDate(
-		filePath: string,
+	updateTaskStartDate(
+		_filePath: string,
 		task: Task,
-		newStartDate: Date,
-		globalStartDate: Date
-	): Promise<boolean> {
-		const daysDiff = daysBetween(globalStartDate, newStartDate);
-
+		_newStartDate: Date,
+		_globalStartDate: Date
+	): boolean {
 		if (task.dependencies.length > 0) {
 			return true;
 		}

@@ -38,7 +38,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 
 		containerEl.empty();
 
-		containerEl.createEl('h2', { text: 'Runalone Project Manager Settings' });
+		new Setting(containerEl)
+			.setName('Runalone project manager settings')
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName('Projects file path')
@@ -47,9 +49,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 				text
 					.setPlaceholder('Projects.md')
 					.setValue(this.plugin.settings.projectsFilePath)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.projectsFilePath = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -62,9 +64,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 					.addOption('week', 'Weeks')
 					.addOption('month', 'Months')
 					.setValue(this.plugin.settings.defaultZoomLevel)
-					.onChange(async (value: 'day' | 'week' | 'month') => {
+					.onChange((value: 'day' | 'week' | 'month') => {
 						this.plugin.settings.defaultZoomLevel = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -74,9 +76,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.showWeekends)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.showWeekends = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -86,9 +88,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.showTodayLine)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.showTodayLine = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -98,13 +100,15 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.autoRefresh)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.autoRefresh = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
-		containerEl.createEl('h3', { text: 'Appearance' });
+		new Setting(containerEl)
+			.setName('Appearance')
+			.setHeading();
 
 		new Setting(containerEl)
 			.setName('Task bar height')
@@ -114,9 +118,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 					.setLimits(20, 50, 2)
 					.setValue(this.plugin.settings.taskBarHeight)
 					.setDynamicTooltip()
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.taskBarHeight = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -128,9 +132,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 					.setLimits(30, 60, 2)
 					.setValue(this.plugin.settings.rowHeight)
 					.setDynamicTooltip()
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.rowHeight = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -140,9 +144,9 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 			.addToggle((toggle) =>
 				toggle
 					.setValue(this.plugin.settings.showDragHandles)
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.showDragHandles = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
@@ -154,13 +158,15 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 					.setLimits(150, 500, 10)
 					.setValue(this.plugin.settings.labelColumnWidth)
 					.setDynamicTooltip()
-					.onChange(async (value) => {
+					.onChange((value) => {
 						this.plugin.settings.labelColumnWidth = value;
-						await this.plugin.saveSettings();
+						void this.plugin.saveSettings();
 					})
 			);
 
-		containerEl.createEl('h3', { text: 'Syntax Reference' });
+		new Setting(containerEl)
+			.setName('Syntax reference')
+			.setHeading();
 
 		const syntaxHelp = containerEl.createDiv({ cls: 'setting-item-description' });
 		const pre = syntaxHelp.createEl('pre', { cls: 'syntax-reference-pre' });

@@ -822,6 +822,64 @@
 	display: none !important;
 }
 
+/* Grabbing cursor class for body */
+body.is-grabbing {
+	cursor: grabbing !important;
+}
+
+body.is-grabbing * {
+	cursor: grabbing !important;
+}
+
+/* Dragging state - disable text selection */
+body.is-dragging {
+	user-select: none !important;
+}
+
+/* Container cursor states */
+.timeline-svg-container.is-grabbing {
+	cursor: grabbing !important;
+}
+
+.timeline-svg-container.is-resizing {
+	cursor: ew-resize !important;
+}
+
+/* ========================================
+   CONFIRM MODAL
+   ======================================== */
+.confirm-modal {
+	padding: 20px;
+}
+
+.confirm-modal p {
+	margin: 0 0 20px 0;
+	font-size: 14px;
+	color: var(--text-normal);
+}
+
+.confirm-modal-buttons {
+	display: flex;
+	justify-content: flex-end;
+	gap: 10px;
+}
+
+.confirm-modal-buttons button {
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.confirm-modal-buttons button.mod-warning {
+	background: var(--text-error);
+	color: white;
+	border: none;
+}
+
+.confirm-modal-buttons button.mod-warning:hover {
+	background: #c0392b;
+}
+
 /* Kanban dot colors by status */
 .kanban-dot-pending {
 	background-color: #6b7280;

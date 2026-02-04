@@ -31,15 +31,17 @@ export class ProjectEditModal extends Modal {
 		};
 	}
 
-	onOpen() {
+	onOpen(): void {
 		const { contentEl } = this;
 		contentEl.empty();
 		contentEl.addClass('project-edit-modal');
 
-		contentEl.createEl('h2', { text: 'Edit Project' });
+		new Setting(contentEl)
+			.setName('Edit project')
+			.setHeading();
 
 		new Setting(contentEl)
-			.setName('Project Name')
+			.setName('Project name')
 			.addText((text) => {
 				text
 					.setValue(this.result.name)
@@ -52,7 +54,7 @@ export class ProjectEditModal extends Modal {
 
 		// Icon selector
 		const iconSetting = new Setting(contentEl)
-			.setName('Project Icon')
+			.setName('Project icon')
 			.setDesc('Select an icon for your project');
 
 		const iconContainer = contentEl.createDiv({ cls: 'project-icon-selector' });
@@ -73,9 +75,9 @@ export class ProjectEditModal extends Modal {
 			});
 		});
 
-		// Linked Note
+		// Linked note
 		const noteSetting = new Setting(contentEl)
-			.setName('Linked Note')
+			.setName('Linked note')
 			.setDesc('Link to an Obsidian note');
 
 		// Note input with autocomplete
@@ -161,12 +163,17 @@ export class ProjectEditModal extends Modal {
 
 		// Delete button (on the left)
 		if (this.onDelete) {
-			const deleteBtn = buttonContainer.createEl('button', { text: 'Delete Project', cls: 'mod-warning project-delete-btn' });
+			const deleteBtn = buttonContainer.createEl('button', { text: 'Delete project', cls: 'mod-warning project-delete-btn' });
 			deleteBtn.addEventListener('click', () => {
-				if (confirm(`Delete project "${this.project.name}" and all its tasks?`)) {
-					this.onDelete!();
-					this.close();
-				}
+				const confirmModal = new DeleteConfirmModal(
+					this.app,
+					`Delete project "${this.project.name}" and all its tasks?`,
+					() => {
+						this.onDelete!();
+						this.close();
+					}
+				);
+				confirmModal.open();
 			});
 		}
 
@@ -200,7 +207,7 @@ export class ProjectEditModal extends Modal {
 
 		if (file) {
 			// Open in a new leaf (read mode)
-			this.app.workspace.openLinkText(file.path, '', true);
+			void this.app.workspace.openLinkText(file.path, '', true);
 			this.close();
 		} else {
 			new Notice(`Note "${this.result.linkedNote}" not found`);
@@ -215,7 +222,48 @@ export class ProjectEditModal extends Modal {
 		}
 	}
 
-	onClose() {
+	onClose(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+	}
+}
+
+// Confirmation modal for delete action
+class DeleteConfirmModal extends Modal {
+	private message: string;
+	private onConfirm: () => void;
+
+	constructor(app: App, message: string, onConfirm: () => void) {
+		super(app);
+		this.message = message;
+		this.onConfirm = onConfirm;
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+		contentEl.addClass('confirm-modal');
+
+		contentEl.createEl('p', { text: this.message });
+
+		const buttonContainer = contentEl.createDiv({ cls: 'confirm-modal-buttons' });
+
+		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+		cancelBtn.addEventListener('click', () => {
+			this.close();
+		});
+
+		const confirmBtn = buttonContainer.createEl('button', {
+			text: 'Delete',
+			cls: 'mod-warning'
+		});
+		confirmBtn.addEventListener('click', () => {
+			this.onConfirm();
+			this.close();
+		});
+	}
+
+	onClose(): void {
 		const { contentEl } = this;
 		contentEl.empty();
 	}

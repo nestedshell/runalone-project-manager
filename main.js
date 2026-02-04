@@ -739,7 +739,7 @@ var FileSync = class {
   setCallbacks(callbacks) {
     this.callbacks = callbacks;
   }
-  async watchFile(filePath) {
+  watchFile(filePath) {
     const file = this.app.vault.getAbstractFileByPath(filePath);
     if (file instanceof import_obsidian.TFile) {
       this.watchedFile = file;
@@ -817,8 +817,7 @@ var FileSync = class {
       }, 100);
     }
   }
-  async updateTaskStartDate(filePath, task, newStartDate, globalStartDate) {
-    const daysDiff = daysBetween(globalStartDate, newStartDate);
+  updateTaskStartDate(_filePath, task, _newStartDate, _globalStartDate) {
     if (task.dependencies.length > 0) {
       return true;
     }
@@ -2008,10 +2007,9 @@ var GanttRenderer = class {
     this.dragReorderIndicator.setAttribute("x2", String(this.config.labelWidth));
     this.dragReorderIndicator.setAttribute("stroke", "var(--interactive-accent)");
     this.dragReorderIndicator.setAttribute("stroke-width", "3");
-    this.dragReorderIndicator.setAttribute("class", "drag-indicator");
-    this.dragReorderIndicator.style.display = "none";
+    this.dragReorderIndicator.setAttribute("class", "drag-indicator is-hidden");
     this.svg.appendChild(this.dragReorderIndicator);
-    document.body.style.cursor = "grabbing";
+    document.body.addClass("is-grabbing");
     this.svg.classList.add("is-reordering");
     const handleMouseMove = (moveEvent) => {
       this.handleDragReorderMove(moveEvent);
@@ -2060,17 +2058,17 @@ var GanttRenderer = class {
     if (foundValidTarget && minDist < 100) {
       this.dragReorderIndicator.setAttribute("y1", String(closestY));
       this.dragReorderIndicator.setAttribute("y2", String(closestY));
-      this.dragReorderIndicator.style.display = "block";
+      this.dragReorderIndicator.classList.remove("is-hidden");
       this.dragReorderIndicator.setAttribute("data-target-project", targetProjectId);
       this.dragReorderIndicator.setAttribute("data-target-index", String(closestIndex));
     } else {
-      this.dragReorderIndicator.style.display = "none";
+      this.dragReorderIndicator.classList.add("is-hidden");
       this.dragReorderIndicator.removeAttribute("data-target-project");
       this.dragReorderIndicator.removeAttribute("data-target-index");
     }
   }
   endDragReorder(e) {
-    document.body.style.cursor = "";
+    document.body.removeClass("is-grabbing");
     if (this.svg) {
       this.svg.classList.remove("is-reordering");
     }
@@ -2107,10 +2105,9 @@ var GanttRenderer = class {
     this.dragReorderIndicator.setAttribute("x2", String(this.config.labelWidth));
     this.dragReorderIndicator.setAttribute("stroke", "var(--text-accent)");
     this.dragReorderIndicator.setAttribute("stroke-width", "4");
-    this.dragReorderIndicator.setAttribute("class", "drag-indicator project-drag-indicator");
-    this.dragReorderIndicator.style.display = "none";
+    this.dragReorderIndicator.setAttribute("class", "drag-indicator project-drag-indicator is-hidden");
     this.svg.appendChild(this.dragReorderIndicator);
-    document.body.style.cursor = "grabbing";
+    document.body.addClass("is-grabbing");
     this.svg.classList.add("is-reordering-project");
     const handleMouseMove = (moveEvent) => {
       this.handleProjectDragReorderMove(moveEvent);
@@ -2153,15 +2150,15 @@ var GanttRenderer = class {
     if (minDist < 150) {
       this.dragReorderIndicator.setAttribute("y1", String(closestY));
       this.dragReorderIndicator.setAttribute("y2", String(closestY));
-      this.dragReorderIndicator.style.display = "block";
+      this.dragReorderIndicator.classList.remove("is-hidden");
       this.dragReorderIndicator.setAttribute("data-target-index", String(closestIndex));
     } else {
-      this.dragReorderIndicator.style.display = "none";
+      this.dragReorderIndicator.classList.add("is-hidden");
       this.dragReorderIndicator.removeAttribute("data-target-index");
     }
   }
   endProjectDragReorder(e) {
-    document.body.style.cursor = "";
+    document.body.removeClass("is-grabbing");
     if (this.svg) {
       this.svg.classList.remove("is-reordering-project");
     }
@@ -2343,8 +2340,8 @@ function createRunaloneLogo() {
 
 // src/ui/KanbanRenderer.ts
 var STATUS_CONFIG = [
-  { status: "pending", title: "To Do", color: "#6b7280" },
-  { status: "in_progress", title: "In Progress", color: "#3b82f6" },
+  { status: "pending", title: "To do", color: "#6b7280" },
+  { status: "in_progress", title: "In progress", color: "#3b82f6" },
   { status: "done", title: "Done", color: "#22c55e" },
   { status: "cancelled", title: "Cancelled", color: "#ef4444" }
 ];
@@ -2547,8 +2544,12 @@ var DragHandler = class {
     };
     document.addEventListener("mousemove", this.boundMouseMove);
     document.addEventListener("mouseup", this.boundMouseUp);
-    this.container.style.cursor = dragType === "move" ? "grabbing" : "ew-resize";
-    document.body.style.userSelect = "none";
+    if (dragType === "move") {
+      this.container.addClass("is-grabbing");
+    } else {
+      this.container.addClass("is-resizing");
+    }
+    document.body.addClass("is-dragging");
     e.preventDefault();
   }
   handleMouseMove(e) {
@@ -2625,9 +2626,10 @@ var DragHandler = class {
     document.removeEventListener("mousemove", this.boundMouseMove);
     document.removeEventListener("mouseup", this.boundMouseUp);
     if (this.container) {
-      this.container.style.cursor = "";
+      this.container.removeClass("is-grabbing");
+      this.container.removeClass("is-resizing");
     }
-    document.body.style.userSelect = "";
+    document.body.removeClass("is-dragging");
     this.state = {
       isDragging: false,
       dragType: null,
@@ -2834,7 +2836,7 @@ var Toolbar = class {
   renderAddButtons(container) {
     const projectBtn = container.createEl("button", {
       cls: "toolbar-button",
-      attr: { title: "New Project" }
+      attr: { title: "New project" }
     });
     projectBtn.appendChild(createFolderPlusIcon());
     projectBtn.onclick = () => {
@@ -2843,7 +2845,7 @@ var Toolbar = class {
     };
     const taskBtn = container.createEl("button", {
       cls: "toolbar-button",
-      attr: { title: "Add Task" }
+      attr: { title: "Add task" }
     });
     taskBtn.appendChild(createPlusIcon());
     taskBtn.onclick = () => {
@@ -2854,7 +2856,7 @@ var Toolbar = class {
   renderCollapseExpand(container, projectsOnly) {
     const projectsBtn = container.createEl("button", {
       cls: "toolbar-button" + (projectsOnly ? " is-active" : ""),
-      attr: { title: "Projects Only" }
+      attr: { title: "Projects only" }
     });
     projectsBtn.appendChild(createProjectsOnlyIcon());
     projectsBtn.onclick = () => {
@@ -2863,7 +2865,7 @@ var Toolbar = class {
     };
     const collapseBtn = container.createEl("button", {
       cls: "toolbar-button",
-      attr: { title: "Collapse All" }
+      attr: { title: "Collapse all" }
     });
     collapseBtn.appendChild(createCollapseIcon());
     collapseBtn.onclick = () => {
@@ -2872,7 +2874,7 @@ var Toolbar = class {
     };
     const expandBtn = container.createEl("button", {
       cls: "toolbar-button",
-      attr: { title: "Expand All" }
+      attr: { title: "Expand all" }
     });
     expandBtn.appendChild(createExpandIcon());
     expandBtn.onclick = () => {
@@ -2939,11 +2941,11 @@ var TaskEditModal = class extends import_obsidian2.Modal {
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("task-edit-modal");
-    contentEl.createEl("h2", { text: "Edit Task" });
-    new import_obsidian2.Setting(contentEl).setName("Task Name").setDesc("The name of the task").addText((text) => text.setPlaceholder("Enter task name").setValue(this.titleValue).onChange((value) => {
+    new import_obsidian2.Setting(contentEl).setName("Edit task").setHeading();
+    new import_obsidian2.Setting(contentEl).setName("Task name").setDesc("The name of the task").addText((text) => text.setPlaceholder("Enter task name").setValue(this.titleValue).onChange((value) => {
       this.titleValue = value;
     }));
-    new import_obsidian2.Setting(contentEl).setName("Start Date").setDesc("When the task starts").addText((text) => {
+    new import_obsidian2.Setting(contentEl).setName("Start date").setDesc("When the task starts").addText((text) => {
       text.inputEl.type = "date";
       text.setValue(this.formatDateForInput(this.startDateValue));
       text.onChange((value) => {
@@ -2962,7 +2964,7 @@ var TaskEditModal = class extends import_obsidian2.Modal {
     new import_obsidian2.Setting(contentEl).setName("Milestone").setDesc("Mark this task as a milestone").addToggle((toggle) => toggle.setValue(this.isMilestoneValue).onChange((value) => {
       this.isMilestoneValue = value;
     }));
-    new import_obsidian2.Setting(contentEl).setName("Status").setDesc("Current status of the task").addDropdown((dropdown) => dropdown.addOption("pending", "Pending").addOption("in_progress", "In Progress").addOption("done", "Done").addOption("cancelled", "Cancelled").setValue(this.statusValue).onChange((value) => {
+    new import_obsidian2.Setting(contentEl).setName("Status").setDesc("Current status of the task").addDropdown((dropdown) => dropdown.addOption("pending", "Pending").addOption("in_progress", "In progress").addOption("done", "Done").addOption("cancelled", "Cancelled").setValue(this.statusValue).onChange((value) => {
       this.statusValue = value;
     }));
     const buttonContainer = contentEl.createDiv({ cls: "task-edit-buttons" });
@@ -3015,15 +3017,15 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
     const { contentEl } = this;
     contentEl.empty();
     contentEl.addClass("project-edit-modal");
-    contentEl.createEl("h2", { text: "Edit Project" });
-    new import_obsidian3.Setting(contentEl).setName("Project Name").addText((text) => {
+    new import_obsidian3.Setting(contentEl).setName("Edit project").setHeading();
+    new import_obsidian3.Setting(contentEl).setName("Project name").addText((text) => {
       text.setValue(this.result.name).onChange((value) => {
         this.result.name = value;
       });
       text.inputEl.focus();
       text.inputEl.select();
     });
-    const iconSetting = new import_obsidian3.Setting(contentEl).setName("Project Icon").setDesc("Select an icon for your project");
+    const iconSetting = new import_obsidian3.Setting(contentEl).setName("Project icon").setDesc("Select an icon for your project");
     const iconContainer = contentEl.createDiv({ cls: "project-icon-selector" });
     PROJECT_ICONS.forEach((icon) => {
       const iconBtn = iconContainer.createEl("span", {
@@ -3038,7 +3040,7 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
         this.result.icon = icon;
       });
     });
-    const noteSetting = new import_obsidian3.Setting(contentEl).setName("Linked Note").setDesc("Link to an Obsidian note");
+    const noteSetting = new import_obsidian3.Setting(contentEl).setName("Linked note").setDesc("Link to an Obsidian note");
     const noteInputContainer = noteSetting.controlEl.createDiv({ cls: "note-input-container" });
     const noteInput = noteInputContainer.createEl("input", {
       type: "text",
@@ -3100,12 +3102,17 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
     });
     const buttonContainer = contentEl.createDiv({ cls: "project-edit-buttons" });
     if (this.onDelete) {
-      const deleteBtn = buttonContainer.createEl("button", { text: "Delete Project", cls: "mod-warning project-delete-btn" });
+      const deleteBtn = buttonContainer.createEl("button", { text: "Delete project", cls: "mod-warning project-delete-btn" });
       deleteBtn.addEventListener("click", () => {
-        if (confirm(`Delete project "${this.project.name}" and all its tasks?`)) {
-          this.onDelete();
-          this.close();
-        }
+        const confirmModal = new DeleteConfirmModal(
+          this.app,
+          `Delete project "${this.project.name}" and all its tasks?`,
+          () => {
+            this.onDelete();
+            this.close();
+          }
+        );
+        confirmModal.open();
       });
     }
     const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
@@ -3132,7 +3139,7 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
       (f) => f.basename === this.result.linkedNote
     );
     if (file) {
-      this.app.workspace.openLinkText(file.path, "", true);
+      void this.app.workspace.openLinkText(file.path, "", true);
       this.close();
     } else {
       new import_obsidian3.Notice(`Note "${this.result.linkedNote}" not found`);
@@ -3144,6 +3151,36 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
     } else {
       btn.addClass("is-hidden");
     }
+  }
+  onClose() {
+    const { contentEl } = this;
+    contentEl.empty();
+  }
+};
+var DeleteConfirmModal = class extends import_obsidian3.Modal {
+  constructor(app, message, onConfirm) {
+    super(app);
+    this.message = message;
+    this.onConfirm = onConfirm;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.empty();
+    contentEl.addClass("confirm-modal");
+    contentEl.createEl("p", { text: this.message });
+    const buttonContainer = contentEl.createDiv({ cls: "confirm-modal-buttons" });
+    const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+    cancelBtn.addEventListener("click", () => {
+      this.close();
+    });
+    const confirmBtn = buttonContainer.createEl("button", {
+      text: "Delete",
+      cls: "mod-warning"
+    });
+    confirmBtn.addEventListener("click", () => {
+      this.onConfirm();
+      this.close();
+    });
   }
   onClose() {
     const { contentEl } = this;
@@ -3240,6 +3277,13 @@ var TimelineView = class extends import_obsidian4.ItemView {
     this.toolbar = new Toolbar();
     this.undoManager = new UndoManager();
   }
+  // Confirmation dialog helper to avoid using window.confirm
+  async confirmAction(message) {
+    return new Promise((resolve) => {
+      const modal = new ConfirmModal(this.app, message, resolve);
+      modal.open();
+    });
+  }
   getViewType() {
     return VIEW_TYPE_TIMELINE;
   }
@@ -3256,8 +3300,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
     this.toolbarContainer = container.createDiv({ cls: "timeline-toolbar-container" });
     this.contentContainer = container.createDiv({ cls: "timeline-content-container" });
     this.svgContainer = this.contentContainer.createDiv({ cls: "timeline-svg-container" });
-    this.kanbanContainer = this.contentContainer.createDiv({ cls: "timeline-kanban-container" });
-    this.kanbanContainer.style.display = "none";
+    this.kanbanContainer = this.contentContainer.createDiv({ cls: "timeline-kanban-container is-hidden" });
     this.setupToolbar();
     this.setupRenderer();
     this.setupKanbanRenderer();
@@ -3323,7 +3366,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
     this.fileSync.setCallbacks({
       onFileChanged: () => {
         if (this.settings.autoRefresh) {
-          this.loadAndRender();
+          void this.loadAndRender();
         }
       }
     });
@@ -3359,9 +3402,9 @@ var TimelineView = class extends import_obsidian4.ItemView {
           new import_obsidian4.Notice("Could not read or create projects file");
           return;
         }
-        await this.processContent(newContent);
+        this.processContent(newContent);
       } else {
-        await this.processContent(content);
+        this.processContent(content);
       }
       this.fileSync.watchFile(this.settings.projectsFilePath);
     } catch (error) {
@@ -3369,7 +3412,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
       new import_obsidian4.Notice("Failed to load timeline");
     }
   }
-  async processContent(content) {
+  processContent(content) {
     const parseResult = this.parser.parse(content);
     const { projects, conflicts, globalEndDate } = this.calculator.calculate(parseResult);
     this.state = {
@@ -3394,8 +3437,8 @@ var TimelineView = class extends import_obsidian4.ItemView {
   renderGanttView() {
     if (!this.svgContainer || !this.kanbanContainer)
       return;
-    this.svgContainer.style.display = "";
-    this.kanbanContainer.style.display = "none";
+    this.svgContainer.removeClass("is-hidden");
+    this.kanbanContainer.addClass("is-hidden");
     this.renderer.render(this.svgContainer, this.state);
     this.dragHandler.updateState(this.state);
     this.svgContainer.querySelectorAll(".collapse-icon").forEach((icon) => {
@@ -3410,8 +3453,8 @@ var TimelineView = class extends import_obsidian4.ItemView {
   renderKanbanView() {
     if (!this.svgContainer || !this.kanbanContainer)
       return;
-    this.svgContainer.style.display = "none";
-    this.kanbanContainer.style.display = "";
+    this.svgContainer.addClass("is-hidden");
+    this.kanbanContainer.removeClass("is-hidden");
     this.kanbanRenderer.render(this.kanbanContainer, this.state);
   }
   handleViewModeChange(mode) {
@@ -3505,7 +3548,8 @@ var TimelineView = class extends import_obsidian4.ItemView {
     const task = this.findTask(taskId);
     if (!task)
       return;
-    if (!confirm(`Delete task "${task.title}"?`)) {
+    const confirmed = await this.confirmAction(`Delete task "${task.title}"?`);
+    if (!confirmed) {
       return;
     }
     await this.fileSync.deleteTask(
@@ -3877,7 +3921,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
     });
     this.renderer.setShowDragHandles(settings.showDragHandles);
     this.setupRenderer();
-    this.loadAndRender();
+    void this.loadAndRender();
   }
   async onClose() {
     this.fileSync.destroy();
@@ -3885,6 +3929,38 @@ var TimelineView = class extends import_obsidian4.ItemView {
     this.toolbar.destroy();
     this.undoManager.destroy();
     this.kanbanRenderer.destroy();
+    await Promise.resolve();
+  }
+};
+var ConfirmModal = class extends import_obsidian4.Modal {
+  constructor(app, message, onResolve) {
+    super(app);
+    this.message = message;
+    this.onResolve = onResolve;
+  }
+  onOpen() {
+    const { contentEl } = this;
+    contentEl.empty();
+    contentEl.addClass("confirm-modal");
+    contentEl.createEl("p", { text: this.message });
+    const buttonContainer = contentEl.createDiv({ cls: "confirm-modal-buttons" });
+    const cancelBtn = buttonContainer.createEl("button", { text: "Cancel" });
+    cancelBtn.addEventListener("click", () => {
+      this.onResolve(false);
+      this.close();
+    });
+    const confirmBtn = buttonContainer.createEl("button", {
+      text: "Confirm",
+      cls: "mod-warning"
+    });
+    confirmBtn.addEventListener("click", () => {
+      this.onResolve(true);
+      this.close();
+    });
+  }
+  onClose() {
+    const { contentEl } = this;
+    contentEl.empty();
   }
 };
 
@@ -3909,63 +3985,63 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.createEl("h2", { text: "Runalone Project Manager Settings" });
+    new import_obsidian5.Setting(containerEl).setName("Runalone project manager settings").setHeading();
     new import_obsidian5.Setting(containerEl).setName("Projects file path").setDesc("Path to the markdown file containing your projects (relative to vault root)").addText(
-      (text) => text.setPlaceholder("Projects.md").setValue(this.plugin.settings.projectsFilePath).onChange(async (value) => {
+      (text) => text.setPlaceholder("Projects.md").setValue(this.plugin.settings.projectsFilePath).onChange((value) => {
         this.plugin.settings.projectsFilePath = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Default zoom level").setDesc("Initial zoom level when opening the timeline").addDropdown(
-      (dropdown) => dropdown.addOption("day", "Days").addOption("week", "Weeks").addOption("month", "Months").setValue(this.plugin.settings.defaultZoomLevel).onChange(async (value) => {
+      (dropdown) => dropdown.addOption("day", "Days").addOption("week", "Weeks").addOption("month", "Months").setValue(this.plugin.settings.defaultZoomLevel).onChange((value) => {
         this.plugin.settings.defaultZoomLevel = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Show weekends").setDesc("Highlight weekend days in the timeline").addToggle(
-      (toggle) => toggle.setValue(this.plugin.settings.showWeekends).onChange(async (value) => {
+      (toggle) => toggle.setValue(this.plugin.settings.showWeekends).onChange((value) => {
         this.plugin.settings.showWeekends = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Show today line").setDesc("Display a vertical line indicating the current date").addToggle(
-      (toggle) => toggle.setValue(this.plugin.settings.showTodayLine).onChange(async (value) => {
+      (toggle) => toggle.setValue(this.plugin.settings.showTodayLine).onChange((value) => {
         this.plugin.settings.showTodayLine = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Auto-refresh").setDesc("Automatically refresh the timeline when the projects file changes").addToggle(
-      (toggle) => toggle.setValue(this.plugin.settings.autoRefresh).onChange(async (value) => {
+      (toggle) => toggle.setValue(this.plugin.settings.autoRefresh).onChange((value) => {
         this.plugin.settings.autoRefresh = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
-    containerEl.createEl("h3", { text: "Appearance" });
+    new import_obsidian5.Setting(containerEl).setName("Appearance").setHeading();
     new import_obsidian5.Setting(containerEl).setName("Task bar height").setDesc("Height of task bars in pixels").addSlider(
-      (slider) => slider.setLimits(20, 50, 2).setValue(this.plugin.settings.taskBarHeight).setDynamicTooltip().onChange(async (value) => {
+      (slider) => slider.setLimits(20, 50, 2).setValue(this.plugin.settings.taskBarHeight).setDynamicTooltip().onChange((value) => {
         this.plugin.settings.taskBarHeight = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Row height").setDesc("Height of each row in pixels").addSlider(
-      (slider) => slider.setLimits(30, 60, 2).setValue(this.plugin.settings.rowHeight).setDynamicTooltip().onChange(async (value) => {
+      (slider) => slider.setLimits(30, 60, 2).setValue(this.plugin.settings.rowHeight).setDynamicTooltip().onChange((value) => {
         this.plugin.settings.rowHeight = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Show drag handles").setDesc("Show the drag handle icons (\u2630). Drag and drop still works when hidden.").addToggle(
-      (toggle) => toggle.setValue(this.plugin.settings.showDragHandles).onChange(async (value) => {
+      (toggle) => toggle.setValue(this.plugin.settings.showDragHandles).onChange((value) => {
         this.plugin.settings.showDragHandles = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
     new import_obsidian5.Setting(containerEl).setName("Label column width").setDesc("Width of the task/project name column in pixels (default: 250)").addSlider(
-      (slider) => slider.setLimits(150, 500, 10).setValue(this.plugin.settings.labelColumnWidth).setDynamicTooltip().onChange(async (value) => {
+      (slider) => slider.setLimits(150, 500, 10).setValue(this.plugin.settings.labelColumnWidth).setDynamicTooltip().onChange((value) => {
         this.plugin.settings.labelColumnWidth = value;
-        await this.plugin.saveSettings();
+        void this.plugin.saveSettings();
       })
     );
-    containerEl.createEl("h3", { text: "Syntax Reference" });
+    new import_obsidian5.Setting(containerEl).setName("Syntax reference").setHeading();
     const syntaxHelp = containerEl.createDiv({ cls: "setting-item-description" });
     const pre = syntaxHelp.createEl("pre", { cls: "syntax-reference-pre" });
     pre.textContent = `# Project Title
@@ -4007,24 +4083,24 @@ var TimelineGanttPlugin = class extends import_obsidian6.Plugin {
       VIEW_TYPE_TIMELINE,
       (leaf) => new TimelineView(leaf, this.settings)
     );
-    this.addRibbonIcon("runalone", "Open Runalone Project Manager", () => {
-      this.activateView();
+    this.addRibbonIcon("runalone", "Open project manager", () => {
+      void this.activateView();
     });
     this.addCommand({
-      id: "open-runalone-project-manager",
-      name: "Open Runalone Project Manager",
+      id: "open-view",
+      name: "Open view",
       callback: () => {
-        this.activateView();
+        void this.activateView();
       }
     });
     this.addCommand({
       id: "create-projects-file",
-      name: "Create Projects File",
-      callback: async () => {
+      name: "Create projects file",
+      callback: () => {
         const filePath = this.settings.projectsFilePath;
         const existingFile = this.app.vault.getAbstractFileByPath(filePath);
         if (existingFile) {
-          this.app.workspace.openLinkText(filePath, "", false);
+          void this.app.workspace.openLinkText(filePath, "", false);
           return;
         }
         const today = new Date().toISOString().split("T")[0];
@@ -4040,14 +4116,14 @@ var TimelineGanttPlugin = class extends import_obsidian6.Plugin {
 > Testing (5) @after:2
 > Deployment (2) @after:3 @milestone
 `;
-        await this.app.vault.create(filePath, content);
-        this.app.workspace.openLinkText(filePath, "", false);
+        void this.app.vault.create(filePath, content).then(() => {
+          void this.app.workspace.openLinkText(filePath, "", false);
+        });
       }
     });
     this.addSettingTab(new TimelineGanttSettingsTab(this.app, this));
   }
-  async onunload() {
-    this.app.workspace.detachLeavesOfType(VIEW_TYPE_TIMELINE);
+  onunload() {
   }
   async activateView() {
     const { workspace } = this.app;

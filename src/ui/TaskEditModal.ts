@@ -31,17 +31,19 @@ export class TaskEditModal extends Modal {
 		this.statusValue = task.status;
 	}
 
-	onOpen() {
+	onOpen(): void {
 		const { contentEl } = this;
 
 		contentEl.empty();
 		contentEl.addClass('task-edit-modal');
 
-		contentEl.createEl('h2', { text: 'Edit Task' });
-
-		// Task Name
 		new Setting(contentEl)
-			.setName('Task Name')
+			.setName('Edit task')
+			.setHeading();
+
+		// Task name
+		new Setting(contentEl)
+			.setName('Task name')
 			.setDesc('The name of the task')
 			.addText(text => text
 				.setPlaceholder('Enter task name')
@@ -50,9 +52,9 @@ export class TaskEditModal extends Modal {
 					this.titleValue = value;
 				}));
 
-		// Start Date
+		// Start date
 		new Setting(contentEl)
-			.setName('Start Date')
+			.setName('Start date')
 			.setDesc('When the task starts')
 			.addText(text => {
 				text.inputEl.type = 'date';
@@ -95,7 +97,7 @@ export class TaskEditModal extends Modal {
 			.setDesc('Current status of the task')
 			.addDropdown(dropdown => dropdown
 				.addOption('pending', 'Pending')
-				.addOption('in_progress', 'In Progress')
+				.addOption('in_progress', 'In progress')
 				.addOption('done', 'Done')
 				.addOption('cancelled', 'Cancelled')
 				.setValue(this.statusValue)
@@ -134,7 +136,7 @@ export class TaskEditModal extends Modal {
 		return `${year}-${month}-${day}`;
 	}
 
-	onClose() {
+	onClose(): void {
 		const { contentEl } = this;
 		contentEl.empty();
 	}

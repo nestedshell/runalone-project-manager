@@ -111,42 +111,42 @@ export class Toolbar {
 	}
 
 	private renderAddButtons(container: HTMLElement): void {
-		// Add Project
+		// Add project
 		const projectBtn = container.createEl('button', {
 			cls: 'toolbar-button',
-			attr: { title: 'New Project' },
+			attr: { title: 'New project' },
 		});
 		projectBtn.appendChild(createFolderPlusIcon());
 		projectBtn.onclick = () => this.callbacks?.onAddProject();
 
-		// Add Task
+		// Add task
 		const taskBtn = container.createEl('button', {
 			cls: 'toolbar-button',
-			attr: { title: 'Add Task' },
+			attr: { title: 'Add task' },
 		});
 		taskBtn.appendChild(createPlusIcon());
 		taskBtn.onclick = () => this.callbacks?.onAddTask();
 	}
 
 	private renderCollapseExpand(container: HTMLElement, projectsOnly: boolean): void {
-		// Projects Only toggle
+		// Projects only toggle
 		const projectsBtn = container.createEl('button', {
 			cls: 'toolbar-button' + (projectsOnly ? ' is-active' : ''),
-			attr: { title: 'Projects Only' },
+			attr: { title: 'Projects only' },
 		});
 		projectsBtn.appendChild(createProjectsOnlyIcon());
 		projectsBtn.onclick = () => this.callbacks?.onToggleProjectsOnly();
 
 		const collapseBtn = container.createEl('button', {
 			cls: 'toolbar-button',
-			attr: { title: 'Collapse All' },
+			attr: { title: 'Collapse all' },
 		});
 		collapseBtn.appendChild(createCollapseIcon());
 		collapseBtn.onclick = () => this.callbacks?.onCollapseAll();
 
 		const expandBtn = container.createEl('button', {
 			cls: 'toolbar-button',
-			attr: { title: 'Expand All' },
+			attr: { title: 'Expand all' },
 		});
 		expandBtn.appendChild(createExpandIcon());
 		expandBtn.onclick = () => this.callbacks?.onExpandAll();

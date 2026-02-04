@@ -112,44 +112,46 @@ export class ExportManager {
 
 				const dataUrl = canvas.toDataURL('image/png');
 
-				const printWindow = window.open('', '_blank');
-				if (!printWindow) {
-					reject(new Error('Failed to open print window'));
-					return;
-				}
+				// Create a Blob with HTML content and open it
+				const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+	<title>${filename}</title>
+	<style>
+		@page {
+			size: ${width}px ${height}px;
+			margin: 0;
+		}
+		body {
+			margin: 0;
+			padding: 0;
+		}
+		img {
+			width: 100%;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+	<img src="${dataUrl}" />
+	<script>
+		window.onload = function() {
+			window.print();
+			window.close();
+		};
+	<\/script>
+</body>
+</html>`;
 
-				printWindow.document.write(`
-					<!DOCTYPE html>
-					<html>
-					<head>
-						<title>${filename}</title>
-						<style>
-							@page {
-								size: ${width}px ${height}px;
-								margin: 0;
-							}
-							body {
-								margin: 0;
-								padding: 0;
-							}
-							img {
-								width: 100%;
-								height: auto;
-							}
-						</style>
-					</head>
-					<body>
-						<img src="${dataUrl}" />
-						<script>
-							window.onload = function() {
-								window.print();
-								window.close();
-							};
-						</script>
-					</body>
-					</html>
-				`);
-				printWindow.document.close();
+				const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
+				const htmlUrl = URL.createObjectURL(htmlBlob);
+
+				window.open(htmlUrl, '_blank');
+
+				// Clean up after a delay to allow the window to open
+				setTimeout(() => {
+					URL.revokeObjectURL(htmlUrl);
+				}, 1000);
 
 				URL.revokeObjectURL(svgUrl);
 				resolve();

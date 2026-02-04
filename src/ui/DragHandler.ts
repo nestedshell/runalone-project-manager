@@ -64,8 +64,13 @@ export class DragHandler {
 		document.addEventListener('mousemove', this.boundMouseMove!);
 		document.addEventListener('mouseup', this.boundMouseUp!);
 
-		this.container.style.cursor = dragType === 'move' ? 'grabbing' : 'ew-resize';
-		document.body.style.userSelect = 'none';
+		// Add CSS classes for cursor and selection instead of inline styles
+		if (dragType === 'move') {
+			this.container.addClass('is-grabbing');
+		} else {
+			this.container.addClass('is-resizing');
+		}
+		document.body.addClass('is-dragging');
 
 		e.preventDefault();
 	}
@@ -163,9 +168,10 @@ export class DragHandler {
 		document.removeEventListener('mouseup', this.boundMouseUp!);
 
 		if (this.container) {
-			this.container.style.cursor = '';
+			this.container.removeClass('is-grabbing');
+			this.container.removeClass('is-resizing');
 		}
-		document.body.style.userSelect = '';
+		document.body.removeClass('is-dragging');
 
 		this.state = {
 			isDragging: false,

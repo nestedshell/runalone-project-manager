@@ -7,8 +7,8 @@ export interface KanbanCallbacks {
 }
 
 const STATUS_CONFIG: { status: TaskStatus; title: string; color: string }[] = [
-	{ status: 'pending', title: 'To Do', color: '#6b7280' },
-	{ status: 'in_progress', title: 'In Progress', color: '#3b82f6' },
+	{ status: 'pending', title: 'To do', color: '#6b7280' },
+	{ status: 'in_progress', title: 'In progress', color: '#3b82f6' },
 	{ status: 'done', title: 'Done', color: '#22c55e' },
 	{ status: 'cancelled', title: 'Cancelled', color: '#ef4444' },
 ];

@@ -31,27 +31,27 @@ export default class TimelineGanttPlugin extends Plugin {
 			(leaf) => new TimelineView(leaf, this.settings)
 		);
 
-		this.addRibbonIcon('runalone', 'Open Runalone Project Manager', () => {
-			this.activateView();
+		this.addRibbonIcon('runalone', 'Open project manager', () => {
+			void this.activateView();
 		});
 
 		this.addCommand({
-			id: 'open-runalone-project-manager',
-			name: 'Open Runalone Project Manager',
+			id: 'open-view',
+			name: 'Open view',
 			callback: () => {
-				this.activateView();
+				void this.activateView();
 			},
 		});
 
 		this.addCommand({
 			id: 'create-projects-file',
-			name: 'Create Projects File',
-			callback: async () => {
+			name: 'Create projects file',
+			callback: () => {
 				const filePath = this.settings.projectsFilePath;
 				const existingFile = this.app.vault.getAbstractFileByPath(filePath);
 
 				if (existingFile) {
-					this.app.workspace.openLinkText(filePath, '', false);
+					void this.app.workspace.openLinkText(filePath, '', false);
 					return;
 				}
 
@@ -69,16 +69,18 @@ export default class TimelineGanttPlugin extends Plugin {
 > Deployment (2) @after:3 @milestone
 `;
 
-				await this.app.vault.create(filePath, content);
-				this.app.workspace.openLinkText(filePath, '', false);
+				void this.app.vault.create(filePath, content).then(() => {
+					void this.app.workspace.openLinkText(filePath, '', false);
+				});
 			},
 		});
 
 		this.addSettingTab(new TimelineGanttSettingsTab(this.app, this));
 	}
 
-	async onunload(): Promise<void> {
-		this.app.workspace.detachLeavesOfType(VIEW_TYPE_TIMELINE);
+	onunload(): void {
+		// Don't detach leaves - Obsidian handles this and detaching
+		// would reset the leaf position on reload
 	}
 
 	async activateView(): Promise<void> {

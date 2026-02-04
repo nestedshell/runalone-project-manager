@@ -1039,12 +1039,11 @@ export class GanttRenderer {
 		this.dragReorderIndicator.setAttribute('x2', String(this.config.labelWidth));
 		this.dragReorderIndicator.setAttribute('stroke', 'var(--interactive-accent)');
 		this.dragReorderIndicator.setAttribute('stroke-width', '3');
-		this.dragReorderIndicator.setAttribute('class', 'drag-indicator');
-		this.dragReorderIndicator.style.display = 'none';
+		this.dragReorderIndicator.setAttribute('class', 'drag-indicator is-hidden');
 		this.svg.appendChild(this.dragReorderIndicator);
 
 		// Add cursor style
-		document.body.style.cursor = 'grabbing';
+		document.body.addClass('is-grabbing');
 		this.svg.classList.add('is-reordering');
 
 		const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -1109,21 +1108,21 @@ export class GanttRenderer {
 		if (foundValidTarget && minDist < 100) {
 			this.dragReorderIndicator.setAttribute('y1', String(closestY));
 			this.dragReorderIndicator.setAttribute('y2', String(closestY));
-			this.dragReorderIndicator.style.display = 'block';
+			this.dragReorderIndicator.classList.remove('is-hidden');
 
 			// Store target for drop
 			this.dragReorderIndicator.setAttribute('data-target-project', targetProjectId);
 			this.dragReorderIndicator.setAttribute('data-target-index', String(closestIndex));
 		} else {
 			// Hide indicator when outside valid drop zone
-			this.dragReorderIndicator.style.display = 'none';
+			this.dragReorderIndicator.classList.add('is-hidden');
 			this.dragReorderIndicator.removeAttribute('data-target-project');
 			this.dragReorderIndicator.removeAttribute('data-target-index');
 		}
 	}
 
 	private endDragReorder(e: MouseEvent): void {
-		document.body.style.cursor = '';
+		document.body.removeClass('is-grabbing');
 
 		if (this.svg) {
 			this.svg.classList.remove('is-reordering');
@@ -1171,12 +1170,11 @@ export class GanttRenderer {
 		this.dragReorderIndicator.setAttribute('x2', String(this.config.labelWidth));
 		this.dragReorderIndicator.setAttribute('stroke', 'var(--text-accent)');
 		this.dragReorderIndicator.setAttribute('stroke-width', '4');
-		this.dragReorderIndicator.setAttribute('class', 'drag-indicator project-drag-indicator');
-		this.dragReorderIndicator.style.display = 'none';
+		this.dragReorderIndicator.setAttribute('class', 'drag-indicator project-drag-indicator is-hidden');
 		this.svg.appendChild(this.dragReorderIndicator);
 
 		// Add cursor style
-		document.body.style.cursor = 'grabbing';
+		document.body.addClass('is-grabbing');
 		this.svg.classList.add('is-reordering-project');
 
 		const handleMouseMove = (moveEvent: MouseEvent) => {
@@ -1233,18 +1231,18 @@ export class GanttRenderer {
 		if (minDist < 150) {
 			this.dragReorderIndicator.setAttribute('y1', String(closestY));
 			this.dragReorderIndicator.setAttribute('y2', String(closestY));
-			this.dragReorderIndicator.style.display = 'block';
+			this.dragReorderIndicator.classList.remove('is-hidden');
 
 			// Store target for drop
 			this.dragReorderIndicator.setAttribute('data-target-index', String(closestIndex));
 		} else {
-			this.dragReorderIndicator.style.display = 'none';
+			this.dragReorderIndicator.classList.add('is-hidden');
 			this.dragReorderIndicator.removeAttribute('data-target-index');
 		}
 	}
 
 	private endProjectDragReorder(e: MouseEvent): void {
-		document.body.style.cursor = '';
+		document.body.removeClass('is-grabbing');
 
 		if (this.svg) {
 			this.svg.classList.remove('is-reordering-project');

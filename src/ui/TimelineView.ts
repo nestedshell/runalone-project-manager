@@ -1,4 +1,4 @@
-import { ItemView, WorkspaceLeaf, Notice } from 'obsidian';
+import { ItemView, WorkspaceLeaf, Notice, Modal, App } from 'obsidian';
 import {
 	TimelineState,
 	ZoomLevel,
@@ -42,6 +42,14 @@ export class TimelineView extends ItemView {
 	private settings: TimelineGanttSettings;
 	private currentViewMode: ViewMode = 'gantt';
 
+	// Confirmation dialog helper to avoid using window.confirm
+	private async confirmAction(message: string): Promise<boolean> {
+		return new Promise((resolve) => {
+			const modal = new ConfirmModal(this.app, message, resolve);
+			modal.open();
+		});
+	}
+
 	constructor(leaf: WorkspaceLeaf, settings: TimelineGanttSettings) {
 		super(leaf);
 		this.settings = settings;
@@ -81,8 +89,7 @@ export class TimelineView extends ItemView {
 		this.toolbarContainer = container.createDiv({ cls: 'timeline-toolbar-container' });
 		this.contentContainer = container.createDiv({ cls: 'timeline-content-container' });
 		this.svgContainer = this.contentContainer.createDiv({ cls: 'timeline-svg-container' });
-		this.kanbanContainer = this.contentContainer.createDiv({ cls: 'timeline-kanban-container' });
-		this.kanbanContainer.style.display = 'none';
+		this.kanbanContainer = this.contentContainer.createDiv({ cls: 'timeline-kanban-container is-hidden' });
 
 		this.setupToolbar();
 		this.setupRenderer();
@@ -156,7 +163,7 @@ export class TimelineView extends ItemView {
 		this.fileSync.setCallbacks({
 			onFileChanged: () => {
 				if (this.settings.autoRefresh) {
-					this.loadAndRender();
+					void this.loadAndRender();
 				}
 			},
 		});
@@ -196,9 +203,9 @@ export class TimelineView extends ItemView {
 					new Notice('Could not read or create projects file');
 					return;
 				}
-				await this.processContent(newContent);
+				this.processContent(newContent);
 			} else {
-				await this.processContent(content);
+				this.processContent(content);
 			}
 
 			this.fileSync.watchFile(this.settings.projectsFilePath);
@@ -208,7 +215,7 @@ export class TimelineView extends ItemView {
 		}
 	}
 
-	private async processContent(content: string): Promise<void> {
+	private processContent(content: string): void {
 		const parseResult = this.parser.parse(content);
 		const { projects, conflicts, globalEndDate } = this.calculator.calculate(parseResult);
 
@@ -239,8 +246,8 @@ export class TimelineView extends ItemView {
 		if (!this.svgContainer || !this.kanbanContainer) return;
 
 		// Show Gantt, hide Kanban
-		this.svgContainer.style.display = '';
-		this.kanbanContainer.style.display = 'none';
+		this.svgContainer.removeClass('is-hidden');
+		this.kanbanContainer.addClass('is-hidden');
 
 		this.renderer.render(this.svgContainer, this.state);
 		this.dragHandler.updateState(this.state);
@@ -259,8 +266,8 @@ export class TimelineView extends ItemView {
 		if (!this.svgContainer || !this.kanbanContainer) return;
 
 		// Show Kanban, hide Gantt
-		this.svgContainer.style.display = 'none';
-		this.kanbanContainer.style.display = '';
+		this.svgContainer.addClass('is-hidden');
+		this.kanbanContainer.removeClass('is-hidden');
 
 		this.kanbanRenderer.render(this.kanbanContainer, this.state);
 	}
@@ -370,7 +377,8 @@ export class TimelineView extends ItemView {
 		if (!task) return;
 
 		// Confirm deletion
-		if (!confirm(`Delete task "${task.title}"?`)) {
+		const confirmed = await this.confirmAction(`Delete task "${task.title}"?`);
+		if (!confirmed) {
 			return;
 		}
 
@@ -853,7 +861,7 @@ export class TimelineView extends ItemView {
 		});
 		this.renderer.setShowDragHandles(settings.showDragHandles);
 		this.setupRenderer();
-		this.loadAndRender();
+		void this.loadAndRender();
 	}
 
 	async onClose(): Promise<void> {
@@ -862,5 +870,48 @@ export class TimelineView extends ItemView {
 		this.toolbar.destroy();
 		this.undoManager.destroy();
 		this.kanbanRenderer.destroy();
+		await Promise.resolve();
+	}
+}
+
+// Confirmation modal to replace window.confirm
+class ConfirmModal extends Modal {
+	private message: string;
+	private onResolve: (result: boolean) => void;
+
+	constructor(app: App, message: string, onResolve: (result: boolean) => void) {
+		super(app);
+		this.message = message;
+		this.onResolve = onResolve;
+	}
+
+	onOpen(): void {
+		const { contentEl } = this;
+		contentEl.empty();
+		contentEl.addClass('confirm-modal');
+
+		contentEl.createEl('p', { text: this.message });
+
+		const buttonContainer = contentEl.createDiv({ cls: 'confirm-modal-buttons' });
+
+		const cancelBtn = buttonContainer.createEl('button', { text: 'Cancel' });
+		cancelBtn.addEventListener('click', () => {
+			this.onResolve(false);
+			this.close();
+		});
+
+		const confirmBtn = buttonContainer.createEl('button', {
+			text: 'Confirm',
+			cls: 'mod-warning'
+		});
+		confirmBtn.addEventListener('click', () => {
+			this.onResolve(true);
+			this.close();
+		});
+	}
+
+	onClose(): void {
+		const { contentEl } = this;
+		contentEl.empty();
 	}
 }
