@@ -3025,7 +3025,7 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
       text.inputEl.focus();
       text.inputEl.select();
     });
-    const iconSetting = new import_obsidian3.Setting(contentEl).setName("Project icon").setDesc("Select an icon for your project");
+    new import_obsidian3.Setting(contentEl).setName("Project icon").setDesc("Select an icon for your project");
     const iconContainer = contentEl.createDiv({ cls: "project-icon-selector" });
     PROJECT_ICONS.forEach((icon) => {
       const iconBtn = iconContainer.createEl("span", {
@@ -3312,16 +3312,36 @@ var TimelineView = class extends import_obsidian4.ItemView {
   }
   setupToolbar() {
     this.toolbar.setCallbacks({
-      onZoomChange: (level) => this.handleZoomChange(level),
-      onViewModeChange: (mode) => this.handleViewModeChange(mode),
-      onCollapseAll: () => this.handleCollapseAll(),
-      onExpandAll: () => this.handleExpandAll(),
-      onToggleProjectsOnly: () => this.handleToggleProjectsOnly(),
-      onUndo: () => this.handleUndo(),
-      onRedo: () => this.handleRedo(),
-      onRefresh: () => this.loadAndRender(),
-      onAddTask: () => this.handleAddTask(),
-      onAddProject: () => this.handleAddProject()
+      onZoomChange: (level) => {
+        this.handleZoomChange(level);
+      },
+      onViewModeChange: (mode) => {
+        this.handleViewModeChange(mode);
+      },
+      onCollapseAll: () => {
+        this.handleCollapseAll();
+      },
+      onExpandAll: () => {
+        this.handleExpandAll();
+      },
+      onToggleProjectsOnly: () => {
+        this.handleToggleProjectsOnly();
+      },
+      onUndo: () => {
+        void this.handleUndo();
+      },
+      onRedo: () => {
+        void this.handleRedo();
+      },
+      onRefresh: () => {
+        void this.loadAndRender();
+      },
+      onAddTask: () => {
+        void this.handleAddTask();
+      },
+      onAddProject: () => {
+        void this.handleAddProject();
+      }
     });
     if (this.toolbarContainer) {
       this.toolbar.render(this.toolbarContainer, this.settings.defaultZoomLevel, this.currentViewMode, this.state.projectsOnly);
@@ -3329,25 +3349,53 @@ var TimelineView = class extends import_obsidian4.ItemView {
   }
   setupKanbanRenderer() {
     this.kanbanRenderer.setCallbacks({
-      onTaskStatusChange: (taskId, newStatus) => this.handleTaskStatusChange(taskId, newStatus),
-      onTaskClick: (taskId) => this.handleTaskClick(taskId)
+      onTaskStatusChange: (taskId, newStatus) => {
+        void this.handleTaskStatusChange(taskId, newStatus);
+      },
+      onTaskClick: (taskId) => {
+        this.handleTaskClick(taskId);
+      }
     });
   }
   setupRenderer() {
     this.renderer.setShowDragHandles(this.settings.showDragHandles);
     this.renderer.setCallbacks({
-      onTaskClick: (taskId) => this.handleTaskClick(taskId),
-      onTaskDragStart: (taskId, e, type) => this.handleTaskDragStart(taskId, e, type),
-      onTaskLabelClick: (taskId, currentTitle) => this.handleTaskLabelEdit(taskId, currentTitle),
-      onTaskDelete: (taskId) => this.handleTaskDelete(taskId),
-      onTaskIndent: (taskId) => this.handleTaskIndentById(taskId),
-      onTaskOutdent: (taskId) => this.handleTaskOutdentById(taskId),
-      onProjectClick: (projectId) => this.handleProjectClick(projectId),
-      onProjectNameClick: (projectId) => this.handleProjectNameEdit(projectId),
-      onTaskReorder: (taskId, targetProjectId, targetIndex) => this.handleTaskReorder(taskId, targetProjectId, targetIndex),
-      onProjectReorder: (projectId, targetIndex) => this.handleProjectReorder(projectId, targetIndex),
-      onOpenLinkedNote: (notePath) => this.handleOpenLinkedNote(notePath),
-      onProjectToggle: (projectId) => this.handleProjectToggle(projectId)
+      onTaskClick: (taskId) => {
+        this.handleTaskClick(taskId);
+      },
+      onTaskDragStart: (taskId, e, type) => {
+        this.handleTaskDragStart(taskId, e, type);
+      },
+      onTaskLabelClick: (taskId, currentTitle) => {
+        this.handleTaskLabelEdit(taskId, currentTitle);
+      },
+      onTaskDelete: (taskId) => {
+        void this.handleTaskDelete(taskId);
+      },
+      onTaskIndent: (taskId) => {
+        void this.handleTaskIndentById(taskId);
+      },
+      onTaskOutdent: (taskId) => {
+        void this.handleTaskOutdentById(taskId);
+      },
+      onProjectClick: (projectId) => {
+        this.handleProjectClick(projectId);
+      },
+      onProjectNameClick: (projectId) => {
+        this.handleProjectNameEdit(projectId);
+      },
+      onTaskReorder: (taskId, targetProjectId, targetIndex) => {
+        void this.handleTaskReorder(taskId, targetProjectId, targetIndex);
+      },
+      onProjectReorder: (projectId, targetIndex) => {
+        void this.handleProjectReorder(projectId, targetIndex);
+      },
+      onOpenLinkedNote: (notePath) => {
+        void this.handleOpenLinkedNote(notePath);
+      },
+      onProjectToggle: (projectId) => {
+        this.handleProjectToggle(projectId);
+      }
     });
   }
   setupDragHandler() {
@@ -3358,7 +3406,7 @@ var TimelineView = class extends import_obsidian4.ItemView {
         this.handleDragUpdate(taskId, newStartDate, newDuration);
       },
       onDragEnd: (taskId, newStartDate, newDuration) => {
-        this.handleDragEnd(taskId, newStartDate, newDuration);
+        void this.handleDragEnd(taskId, newStartDate, newDuration);
       }
     });
   }
@@ -3384,10 +3432,10 @@ var TimelineView = class extends import_obsidian4.ItemView {
       if (e.ctrlKey || e.metaKey) {
         if (e.key === "z" && !e.shiftKey) {
           e.preventDefault();
-          this.handleUndo();
+          void this.handleUndo();
         } else if (e.key === "z" && e.shiftKey || e.key === "y") {
           e.preventDefault();
-          this.handleRedo();
+          void this.handleRedo();
         }
       }
     });
@@ -3572,29 +3620,33 @@ var TimelineView = class extends import_obsidian4.ItemView {
     const modal = new ProjectEditModal(
       this.app,
       project,
-      async (result) => {
-        await this.fileSync.updateProject(
-          this.settings.projectsFilePath,
-          project.lineNumber,
-          {
-            name: result.name,
-            icon: result.icon,
-            linkedNote: result.linkedNote
-          }
-        );
-        await this.loadAndRender();
+      (result) => {
+        void (async () => {
+          await this.fileSync.updateProject(
+            this.settings.projectsFilePath,
+            project.lineNumber,
+            {
+              name: result.name,
+              icon: result.icon,
+              linkedNote: result.linkedNote
+            }
+          );
+          await this.loadAndRender();
+        })();
       },
-      async () => {
-        const nextProject = this.state.projects[projectIndex + 1];
-        const nextProjectLineNumber = nextProject ? nextProject.lineNumber : null;
-        await this.fileSync.deleteProject(
-          this.settings.projectsFilePath,
-          project.lineNumber,
-          nextProjectLineNumber
-        );
-        this.state = { ...this.state, selectedProjectId: null, selectedTaskId: null };
-        await this.loadAndRender();
-        new import_obsidian4.Notice("Project deleted");
+      () => {
+        void (async () => {
+          const nextProject = this.state.projects[projectIndex + 1];
+          const nextProjectLineNumber = nextProject ? nextProject.lineNumber : null;
+          await this.fileSync.deleteProject(
+            this.settings.projectsFilePath,
+            project.lineNumber,
+            nextProjectLineNumber
+          );
+          this.state = { ...this.state, selectedProjectId: null, selectedTaskId: null };
+          await this.loadAndRender();
+          new import_obsidian4.Notice("Project deleted");
+        })();
       }
     );
     modal.open();
@@ -3868,29 +3920,31 @@ var TimelineView = class extends import_obsidian4.ItemView {
       return;
     this.state = { ...this.state, selectedTaskId: taskId };
     this.render();
-    const modal = new TaskEditModal(this.app, task, async (result) => {
-      await this.fileSync.updateTaskFull(
-        this.settings.projectsFilePath,
-        task.lineNumber,
-        {
-          title: result.title,
-          duration: result.duration,
-          startDate: result.startDate,
-          isMilestone: result.isMilestone,
-          status: result.status
+    const modal = new TaskEditModal(this.app, task, (result) => {
+      void (async () => {
+        await this.fileSync.updateTaskFull(
+          this.settings.projectsFilePath,
+          task.lineNumber,
+          {
+            title: result.title,
+            duration: result.duration,
+            startDate: result.startDate,
+            isMilestone: result.isMilestone,
+            status: result.status
+          }
+        );
+        if (task.parent) {
+          const updatedTask = { ...task, duration: result.duration };
+          if (result.startDate) {
+            updatedTask.startDate = result.startDate;
+            updatedTask.endDate = new Date(result.startDate.getTime() + result.duration * 24 * 60 * 60 * 1e3);
+          } else {
+            updatedTask.endDate = new Date(task.startDate.getTime() + result.duration * 24 * 60 * 60 * 1e3);
+          }
+          await this.updateParentDurations(updatedTask);
         }
-      );
-      if (task.parent) {
-        const updatedTask = { ...task, duration: result.duration };
-        if (result.startDate) {
-          updatedTask.startDate = result.startDate;
-          updatedTask.endDate = new Date(result.startDate.getTime() + result.duration * 24 * 60 * 60 * 1e3);
-        } else {
-          updatedTask.endDate = new Date(task.startDate.getTime() + result.duration * 24 * 60 * 60 * 1e3);
-        }
-        await this.updateParentDurations(updatedTask);
-      }
-      await this.loadAndRender();
+        await this.loadAndRender();
+      })();
     });
     modal.open();
   }
@@ -3985,7 +4039,7 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    new import_obsidian5.Setting(containerEl).setName("Runalone project manager settings").setHeading();
+    new import_obsidian5.Setting(containerEl).setName("General").setHeading();
     new import_obsidian5.Setting(containerEl).setName("Projects file path").setDesc("Path to the markdown file containing your projects (relative to vault root)").addText(
       (text) => text.setPlaceholder("Projects.md").setValue(this.plugin.settings.projectsFilePath).onChange((value) => {
         this.plugin.settings.projectsFilePath = value;

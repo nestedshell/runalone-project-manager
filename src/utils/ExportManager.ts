@@ -139,7 +139,7 @@ export class ExportManager {
 			window.print();
 			window.close();
 		};
-	<\/script>
+	</script>
 </body>
 </html>`;
 

@@ -18,7 +18,7 @@ import { Toolbar } from './Toolbar';
 import { TaskEditModal, TaskEditResult } from './TaskEditModal';
 import { ProjectEditModal, ProjectEditResult } from './ProjectEditModal';
 import { UndoManager, UndoableAction } from '../utils/UndoManager';
-import { cloneDate, addDays } from '../utils/DateUtils';
+import { cloneDate } from '../utils/DateUtils';
 import { TimelineGanttSettings } from '../settings/SettingsTab';
 
 export const VIEW_TYPE_TIMELINE = 'timeline-gantt-view';
@@ -104,16 +104,16 @@ export class TimelineView extends ItemView {
 
 	private setupToolbar(): void {
 		this.toolbar.setCallbacks({
-			onZoomChange: (level) => this.handleZoomChange(level),
-			onViewModeChange: (mode) => this.handleViewModeChange(mode),
-			onCollapseAll: () => this.handleCollapseAll(),
-			onExpandAll: () => this.handleExpandAll(),
-			onToggleProjectsOnly: () => this.handleToggleProjectsOnly(),
-			onUndo: () => this.handleUndo(),
-			onRedo: () => this.handleRedo(),
-			onRefresh: () => this.loadAndRender(),
-			onAddTask: () => this.handleAddTask(),
-			onAddProject: () => this.handleAddProject(),
+			onZoomChange: (level) => { this.handleZoomChange(level); },
+			onViewModeChange: (mode) => { this.handleViewModeChange(mode); },
+			onCollapseAll: () => { this.handleCollapseAll(); },
+			onExpandAll: () => { this.handleExpandAll(); },
+			onToggleProjectsOnly: () => { this.handleToggleProjectsOnly(); },
+			onUndo: () => { void this.handleUndo(); },
+			onRedo: () => { void this.handleRedo(); },
+			onRefresh: () => { void this.loadAndRender(); },
+			onAddTask: () => { void this.handleAddTask(); },
+			onAddProject: () => { void this.handleAddProject(); },
 		});
 
 		if (this.toolbarContainer) {
@@ -123,26 +123,26 @@ export class TimelineView extends ItemView {
 
 	private setupKanbanRenderer(): void {
 		this.kanbanRenderer.setCallbacks({
-			onTaskStatusChange: (taskId, newStatus) => this.handleTaskStatusChange(taskId, newStatus),
-			onTaskClick: (taskId) => this.handleTaskClick(taskId),
+			onTaskStatusChange: (taskId, newStatus) => { void this.handleTaskStatusChange(taskId, newStatus); },
+			onTaskClick: (taskId) => { this.handleTaskClick(taskId); },
 		});
 	}
 
 	private setupRenderer(): void {
 		this.renderer.setShowDragHandles(this.settings.showDragHandles);
 		this.renderer.setCallbacks({
-			onTaskClick: (taskId) => this.handleTaskClick(taskId),
-			onTaskDragStart: (taskId, e, type) => this.handleTaskDragStart(taskId, e, type),
-			onTaskLabelClick: (taskId, currentTitle) => this.handleTaskLabelEdit(taskId, currentTitle),
-			onTaskDelete: (taskId) => this.handleTaskDelete(taskId),
-			onTaskIndent: (taskId) => this.handleTaskIndentById(taskId),
-			onTaskOutdent: (taskId) => this.handleTaskOutdentById(taskId),
-			onProjectClick: (projectId) => this.handleProjectClick(projectId),
-			onProjectNameClick: (projectId) => this.handleProjectNameEdit(projectId),
-			onTaskReorder: (taskId, targetProjectId, targetIndex) => this.handleTaskReorder(taskId, targetProjectId, targetIndex),
-			onProjectReorder: (projectId, targetIndex) => this.handleProjectReorder(projectId, targetIndex),
-			onOpenLinkedNote: (notePath) => this.handleOpenLinkedNote(notePath),
-			onProjectToggle: (projectId) => this.handleProjectToggle(projectId),
+			onTaskClick: (taskId) => { this.handleTaskClick(taskId); },
+			onTaskDragStart: (taskId, e, type) => { this.handleTaskDragStart(taskId, e, type); },
+			onTaskLabelClick: (taskId, currentTitle) => { this.handleTaskLabelEdit(taskId, currentTitle); },
+			onTaskDelete: (taskId) => { void this.handleTaskDelete(taskId); },
+			onTaskIndent: (taskId) => { void this.handleTaskIndentById(taskId); },
+			onTaskOutdent: (taskId) => { void this.handleTaskOutdentById(taskId); },
+			onProjectClick: (projectId) => { this.handleProjectClick(projectId); },
+			onProjectNameClick: (projectId) => { this.handleProjectNameEdit(projectId); },
+			onTaskReorder: (taskId, targetProjectId, targetIndex) => { void this.handleTaskReorder(taskId, targetProjectId, targetIndex); },
+			onProjectReorder: (projectId, targetIndex) => { void this.handleProjectReorder(projectId, targetIndex); },
+			onOpenLinkedNote: (notePath) => { void this.handleOpenLinkedNote(notePath); },
+			onProjectToggle: (projectId) => { this.handleProjectToggle(projectId); },
 		});
 	}
 
@@ -154,7 +154,7 @@ export class TimelineView extends ItemView {
 				this.handleDragUpdate(taskId, newStartDate, newDuration);
 			},
 			onDragEnd: (taskId, newStartDate, newDuration) => {
-				this.handleDragEnd(taskId, newStartDate, newDuration);
+				void this.handleDragEnd(taskId, newStartDate, newDuration);
 			},
 		});
 	}
@@ -183,10 +183,10 @@ export class TimelineView extends ItemView {
 			if (e.ctrlKey || e.metaKey) {
 				if (e.key === 'z' && !e.shiftKey) {
 					e.preventDefault();
-					this.handleUndo();
+					void this.handleUndo();
 				} else if ((e.key === 'z' && e.shiftKey) || e.key === 'y') {
 					e.preventDefault();
-					this.handleRedo();
+					void this.handleRedo();
 				}
 			}
 		});
@@ -409,34 +409,38 @@ export class TimelineView extends ItemView {
 		const modal = new ProjectEditModal(
 			this.app,
 			project,
-			async (result: ProjectEditResult) => {
-				await this.fileSync.updateProject(
-					this.settings.projectsFilePath,
-					project.lineNumber,
-					{
-						name: result.name,
-						icon: result.icon,
-						linkedNote: result.linkedNote
-					}
-				);
-				await this.loadAndRender();
+			(result: ProjectEditResult) => {
+				void (async () => {
+					await this.fileSync.updateProject(
+						this.settings.projectsFilePath,
+						project.lineNumber,
+						{
+							name: result.name,
+							icon: result.icon,
+							linkedNote: result.linkedNote
+						}
+					);
+					await this.loadAndRender();
+				})();
 			},
-			async () => {
-				// Delete callback
-				const nextProject = this.state.projects[projectIndex + 1];
-				const nextProjectLineNumber = nextProject ? nextProject.lineNumber : null;
+			() => {
+				void (async () => {
+					// Delete callback
+					const nextProject = this.state.projects[projectIndex + 1];
+					const nextProjectLineNumber = nextProject ? nextProject.lineNumber : null;
 
-				await this.fileSync.deleteProject(
-					this.settings.projectsFilePath,
-					project.lineNumber,
-					nextProjectLineNumber
-				);
+					await this.fileSync.deleteProject(
+						this.settings.projectsFilePath,
+						project.lineNumber,
+						nextProjectLineNumber
+					);
 
-				// Clear selection
-				this.state = { ...this.state, selectedProjectId: null, selectedTaskId: null };
+					// Clear selection
+					this.state = { ...this.state, selectedProjectId: null, selectedTaskId: null };
 
-				await this.loadAndRender();
-				new Notice('Project deleted');
+					await this.loadAndRender();
+					new Notice('Project deleted');
+				})();
 			}
 		);
 
@@ -799,33 +803,35 @@ export class TimelineView extends ItemView {
 		this.state = { ...this.state, selectedTaskId: taskId };
 		this.render();
 
-		const modal = new TaskEditModal(this.app, task, async (result: TaskEditResult) => {
-			await this.fileSync.updateTaskFull(
-				this.settings.projectsFilePath,
-				task.lineNumber,
-				{
-					title: result.title,
-					duration: result.duration,
-					startDate: result.startDate,
-					isMilestone: result.isMilestone,
-					status: result.status,
-				}
-			);
+		const modal = new TaskEditModal(this.app, task, (result: TaskEditResult) => {
+			void (async () => {
+				await this.fileSync.updateTaskFull(
+					this.settings.projectsFilePath,
+					task.lineNumber,
+					{
+						title: result.title,
+						duration: result.duration,
+						startDate: result.startDate,
+						isMilestone: result.isMilestone,
+						status: result.status,
+					}
+				);
 
-			// Update parent durations if this task has a parent
-			if (task.parent) {
-				// We need to recalculate with the new duration
-				const updatedTask = { ...task, duration: result.duration };
-				if (result.startDate) {
-					updatedTask.startDate = result.startDate;
-					updatedTask.endDate = new Date(result.startDate.getTime() + result.duration * 24 * 60 * 60 * 1000);
-				} else {
-					updatedTask.endDate = new Date(task.startDate.getTime() + result.duration * 24 * 60 * 60 * 1000);
+				// Update parent durations if this task has a parent
+				if (task.parent) {
+					// We need to recalculate with the new duration
+					const updatedTask = { ...task, duration: result.duration };
+					if (result.startDate) {
+						updatedTask.startDate = result.startDate;
+						updatedTask.endDate = new Date(result.startDate.getTime() + result.duration * 24 * 60 * 60 * 1000);
+					} else {
+						updatedTask.endDate = new Date(task.startDate.getTime() + result.duration * 24 * 60 * 60 * 1000);
+					}
+					await this.updateParentDurations(updatedTask as Task);
 				}
-				await this.updateParentDurations(updatedTask as Task);
-			}
 
-			await this.loadAndRender();
+				await this.loadAndRender();
+			})();
 		});
 
 		modal.open();

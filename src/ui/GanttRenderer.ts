@@ -16,7 +16,6 @@ import {
 	getWeekNumber,
 	getMonthName,
 	addDays,
-	isSameDay,
 } from '../utils/DateUtils';
 
 export class GanttRenderer {

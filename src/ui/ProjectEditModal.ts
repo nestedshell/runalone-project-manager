@@ -53,7 +53,7 @@ export class ProjectEditModal extends Modal {
 			});
 
 		// Icon selector
-		const iconSetting = new Setting(contentEl)
+		new Setting(contentEl)
 			.setName('Project icon')
 			.setDesc('Select an icon for your project');
 

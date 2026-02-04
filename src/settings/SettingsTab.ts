@@ -39,7 +39,7 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('Runalone project manager settings')
+			.setName('General')
 			.setHeading();
 
 		new Setting(containerEl)

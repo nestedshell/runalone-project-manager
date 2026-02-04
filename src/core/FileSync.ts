@@ -1,7 +1,6 @@
-import { App, TFile, Vault } from 'obsidian';
-import { Task, Project, TimelineState } from './TaskModel';
+import { App, TFile } from 'obsidian';
+import { Task } from './TaskModel';
 import { Parser } from './Parser';
-import { daysBetween } from '../utils/DateUtils';
 
 export interface FileSyncCallbacks {
 	onFileChanged: () => void;

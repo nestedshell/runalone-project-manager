@@ -1,4 +1,4 @@
-import { TimelineState, Project, Task } from '../core/TaskModel';
+import { Project, Task } from '../core/TaskModel';
 import { cloneDate } from './DateUtils';
 
 export interface UndoableAction {
@@ -12,11 +12,6 @@ export interface UndoableAction {
 		startDate: Date;
 		duration: number;
 	};
-}
-
-interface StateSnapshot {
-	projects: Project[];
-	timestamp: number;
 }
 
 export class UndoManager {
