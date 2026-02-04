@@ -36,7 +36,7 @@ export default class TimelineGanttPlugin extends Plugin {
 		});
 
 		this.addCommand({
-			id: 'open-runalone-projects',
+			id: 'open-runalone-project-manager',
 			name: 'Open Runalone Project Manager',
 			callback: () => {
 				this.activateView();

@@ -14,7 +14,7 @@ And if you're someone who juggles many projects at once—especially if you deal
 
 ## The Solution
 
-**Runalone Projects** was born from this personal need: a project management plugin built specifically for individuals, fully integrated into your Obsidian vault.
+**Runalone Project Manager** was born from this personal need: a project management plugin built specifically for individuals, fully integrated into your Obsidian vault.
 
 No cloud. No accounts. No external services. Everything stays local, in plain text files you control.
 
@@ -49,13 +49,13 @@ The goal is simple: **reduce chaos, increase clarity**, and let you focus on wha
 
 1. Open Obsidian Settings
 2. Navigate to **Community Plugins**
-3. Click **Browse** and search for "Runalone Projects"
+3. Click **Browse** and search for "Runalone Project Manager"
 4. Click **Install**, then **Enable**
 
 ### Manual Installation
 
 1. Download the latest release from GitHub
-2. Extract the files to your vault's `.obsidian/plugins/runalone-projects/` folder
+2. Extract the files to your vault's `.obsidian/plugins/runalone-project-manager/` folder
 3. Reload Obsidian
 4. Enable the plugin in Settings → Community Plugins
 
@@ -106,7 +106,7 @@ Projects are stored in a simple, human-readable format:
 
 This plugin embraces a core principle: **simplicity over features**.
 
-Not every project needs a complex system. Sometimes all you need is a clear view of what needs to be done and when. Runalone Projects gives you exactly that—nothing more, nothing less.
+Not every project needs a complex system. Sometimes all you need is a clear view of what needs to be done and when. Runalone Project Manager gives you exactly that—nothing more, nothing less.
 
 It's built for people who:
 - Work independently or on small personal projects

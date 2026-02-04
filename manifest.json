@@ -3,7 +3,7 @@
 	"name": "Runalone Project Manager",
 	"version": "1.0.0",
 	"minAppVersion": "1.0.0",
-	"description": "Visual project management with interactive Gantt timeline and Kanban board based on plain text files",
+	"description": "A minimalist project management tool designed for solo builders.",
 	"author": "nestedshell",
 	"authorUrl": "https://github.com/nestedshell",
 	"isDesktopOnly": false

@@ -4011,7 +4011,7 @@ var TimelineGanttPlugin = class extends import_obsidian6.Plugin {
       this.activateView();
     });
     this.addCommand({
-      id: "open-runalone-projects",
+      id: "open-runalone-project-manager",
       name: "Open Runalone Project Manager",
       callback: () => {
         this.activateView();
