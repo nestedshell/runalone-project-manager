@@ -1,4 +1,5 @@
 import { Task, Project, TimelineState, TaskStatus } from '../core/TaskModel';
+import { createClockIcon, createLinkIcon } from '../utils/Icons';
 
 export interface KanbanCallbacks {
 	onTaskStatusChange: (taskId: string, newStatus: TaskStatus) => void;
@@ -48,8 +49,7 @@ export class KanbanRenderer {
 		header.className = 'kanban-header';
 
 		const dot = document.createElement('span');
-		dot.className = 'kanban-dot';
-		dot.style.backgroundColor = config.color;
+		dot.className = `kanban-dot kanban-dot-${config.status}`;
 		header.appendChild(dot);
 
 		const title = document.createElement('span');
@@ -108,7 +108,11 @@ export class KanbanRenderer {
 		const titleEl = document.createElement('div');
 		titleEl.className = 'kanban-card-title';
 		if (task.isMilestone) {
-			titleEl.innerHTML = `<span class="milestone-icon">&#9670;</span> ${task.title}`;
+			const milestoneIcon = document.createElement('span');
+			milestoneIcon.className = 'milestone-icon';
+			milestoneIcon.textContent = '◆';
+			titleEl.appendChild(milestoneIcon);
+			titleEl.appendChild(document.createTextNode(task.title));
 		} else {
 			titleEl.textContent = task.title;
 		}
@@ -121,23 +125,25 @@ export class KanbanRenderer {
 		// Duration
 		const duration = document.createElement('span');
 		duration.className = 'kanban-meta-item';
-		duration.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${task.duration}d`;
+		duration.appendChild(createClockIcon());
+		duration.appendChild(document.createTextNode(` ${task.duration}d`));
 		meta.appendChild(duration);
 
 		// Dependencies
 		if (task.dependencies.length > 0) {
 			const deps = document.createElement('span');
 			deps.className = 'kanban-meta-item';
-			deps.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> ${task.dependencies.length}`;
+			deps.appendChild(createLinkIcon());
+			deps.appendChild(document.createTextNode(` ${task.dependencies.length}`));
 			meta.appendChild(deps);
 		}
 
 		card.appendChild(meta);
 
-		// Color indicator
+		// Color indicator - use CSS custom property instead of inline style
 		if (task.color) {
-			card.style.borderLeftColor = task.color;
-			card.style.borderLeftWidth = '4px';
+			card.classList.add('has-custom-color');
+			card.style.setProperty('--task-color', task.color);
 		}
 
 		// Drag events

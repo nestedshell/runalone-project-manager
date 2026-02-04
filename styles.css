@@ -812,3 +812,48 @@
 	background: var(--text-error);
 	color: white;
 }
+
+/* ========================================
+   UTILITY CLASSES (avoid inline styles)
+   ======================================== */
+
+/* Hidden utility class */
+.is-hidden {
+	display: none !important;
+}
+
+/* Kanban dot colors by status */
+.kanban-dot-pending {
+	background-color: #6b7280;
+}
+
+.kanban-dot-in_progress {
+	background-color: #3b82f6;
+}
+
+.kanban-dot-done {
+	background-color: #22c55e;
+}
+
+.kanban-dot-cancelled {
+	background-color: #ef4444;
+}
+
+/* Kanban card with custom color */
+.kanban-card.has-custom-color {
+	border-left-color: var(--task-color);
+	border-left-width: 4px;
+}
+
+/* Project delete button alignment */
+.project-delete-btn {
+	margin-right: auto;
+}
+
+/* Syntax reference pre block */
+.syntax-reference-pre {
+	background: var(--background-secondary);
+	padding: 10px;
+	border-radius: 4px;
+	font-size: 12px;
+}

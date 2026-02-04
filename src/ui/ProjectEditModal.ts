@@ -1,5 +1,6 @@
 import { App, Modal, Setting, Notice } from 'obsidian';
 import { Project, PROJECT_ICONS } from '../core/TaskModel';
+import { createExternalLinkIcon, createXIcon } from '../utils/Icons';
 
 export interface ProjectEditResult {
 	name: string;
@@ -87,8 +88,7 @@ export class ProjectEditModal extends Modal {
 		});
 		noteInput.value = this.result.linkedNote || '';
 
-		const suggestionContainer = noteInputContainer.createDiv({ cls: 'note-suggestions' });
-		suggestionContainer.style.display = 'none';
+		const suggestionContainer = noteInputContainer.createDiv({ cls: 'note-suggestions is-hidden' });
 
 		// Get all markdown files
 		const allFiles = this.app.vault.getMarkdownFiles();
@@ -98,7 +98,7 @@ export class ProjectEditModal extends Modal {
 			this.result.linkedNote = noteInput.value || undefined;
 
 			if (query.length < 1) {
-				suggestionContainer.style.display = 'none';
+				suggestionContainer.addClass('is-hidden');
 				return;
 			}
 
@@ -109,37 +109,36 @@ export class ProjectEditModal extends Modal {
 			suggestionContainer.empty();
 
 			if (matches.length > 0) {
-				suggestionContainer.style.display = 'block';
+				suggestionContainer.removeClass('is-hidden');
 				for (const file of matches) {
 					const item = suggestionContainer.createDiv({ cls: 'note-suggestion-item' });
 					item.textContent = file.basename;
 					item.addEventListener('click', () => {
 						noteInput.value = file.basename;
 						this.result.linkedNote = file.basename;
-						suggestionContainer.style.display = 'none';
+						suggestionContainer.addClass('is-hidden');
 						// Update button visibility
 						this.updateOpenNoteButton(openBtn, noteInput.value);
 					});
 				}
 			} else {
-				suggestionContainer.style.display = 'none';
+				suggestionContainer.addClass('is-hidden');
 			}
 		});
 
 		noteInput.addEventListener('blur', () => {
 			// Delay to allow click on suggestion
 			setTimeout(() => {
-				suggestionContainer.style.display = 'none';
+				suggestionContainer.addClass('is-hidden');
 			}, 200);
 		});
 
 		// Open note button
 		const openBtn = noteInputContainer.createEl('button', {
-			cls: 'note-open-btn',
+			cls: 'note-open-btn' + (this.result.linkedNote ? '' : ' is-hidden'),
 			attr: { title: 'Open linked note' },
 		});
-		openBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
-		openBtn.style.display = this.result.linkedNote ? '' : 'none';
+		openBtn.appendChild(createExternalLinkIcon());
 		openBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			this.openLinkedNote();
@@ -150,7 +149,7 @@ export class ProjectEditModal extends Modal {
 			cls: 'note-clear-btn',
 			attr: { title: 'Clear linked note' },
 		});
-		clearBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+		clearBtn.appendChild(createXIcon());
 		clearBtn.addEventListener('click', (e) => {
 			e.preventDefault();
 			noteInput.value = '';
@@ -162,8 +161,7 @@ export class ProjectEditModal extends Modal {
 
 		// Delete button (on the left)
 		if (this.onDelete) {
-			const deleteBtn = buttonContainer.createEl('button', { text: 'Delete Project', cls: 'mod-warning' });
-			deleteBtn.style.marginRight = 'auto';
+			const deleteBtn = buttonContainer.createEl('button', { text: 'Delete Project', cls: 'mod-warning project-delete-btn' });
 			deleteBtn.addEventListener('click', () => {
 				if (confirm(`Delete project "${this.project.name}" and all its tasks?`)) {
 					this.onDelete!();
@@ -210,7 +208,11 @@ export class ProjectEditModal extends Modal {
 	}
 
 	private updateOpenNoteButton(btn: HTMLButtonElement, value: string): void {
-		btn.style.display = value ? '' : 'none';
+		if (value) {
+			btn.removeClass('is-hidden');
+		} else {
+			btn.addClass('is-hidden');
+		}
 	}
 
 	onClose() {

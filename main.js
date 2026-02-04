@@ -2189,6 +2189,158 @@ var GanttRenderer = class {
 };
 var ganttRenderer = new GanttRenderer();
 
+// src/utils/Icons.ts
+function createSvgElement(tag, attrs) {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    el.setAttribute(key, value);
+  }
+  return el;
+}
+function createBaseSvg(options = {}) {
+  const { width = 18, height = 18, strokeWidth = 2, className } = options;
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", String(width));
+  svg.setAttribute("height", String(height));
+  svg.setAttribute("viewBox", "0 0 24 24");
+  svg.setAttribute("fill", "none");
+  svg.setAttribute("stroke", "currentColor");
+  svg.setAttribute("stroke-width", String(strokeWidth));
+  if (className) {
+    svg.setAttribute("class", className);
+  }
+  return svg;
+}
+function createClockIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 12, height: (_b = options.height) != null ? _b : 12 });
+  svg.appendChild(createSvgElement("circle", { cx: "12", cy: "12", r: "10" }));
+  svg.appendChild(createSvgElement("path", { d: "M12 6v6l4 2" }));
+  return svg;
+}
+function createLinkIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 12, height: (_b = options.height) != null ? _b : 12 });
+  svg.appendChild(createSvgElement("path", { d: "M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" }));
+  svg.appendChild(createSvgElement("path", { d: "M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" }));
+  return svg;
+}
+function createTimelineIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 14, height: (_b = options.height) != null ? _b : 14, strokeWidth: 2.5 });
+  svg.appendChild(createSvgElement("rect", { x: "3", y: "4", width: "16", height: "4", rx: "1" }));
+  svg.appendChild(createSvgElement("rect", { x: "5", y: "10", width: "10", height: "4", rx: "1" }));
+  svg.appendChild(createSvgElement("rect", { x: "3", y: "16", width: "13", height: "4", rx: "1" }));
+  return svg;
+}
+function createKanbanIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 14, height: (_b = options.height) != null ? _b : 14, strokeWidth: 2.5 });
+  svg.appendChild(createSvgElement("rect", { x: "3", y: "3", width: "5", height: "16", rx: "1" }));
+  svg.appendChild(createSvgElement("rect", { x: "10", y: "3", width: "5", height: "10", rx: "1" }));
+  svg.appendChild(createSvgElement("rect", { x: "17", y: "3", width: "5", height: "6", rx: "1" }));
+  return svg;
+}
+function createFolderPlusIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z" }));
+  svg.appendChild(createSvgElement("line", { x1: "12", y1: "10", x2: "12", y2: "16" }));
+  svg.appendChild(createSvgElement("line", { x1: "9", y1: "13", x2: "15", y2: "13" }));
+  return svg;
+}
+function createPlusIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("line", { x1: "12", y1: "5", x2: "12", y2: "19" }));
+  svg.appendChild(createSvgElement("line", { x1: "5", y1: "12", x2: "19", y2: "12" }));
+  return svg;
+}
+function createProjectsOnlyIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("rect", { x: "3", y: "3", width: "18", height: "6", rx: "1" }));
+  const rect2 = createSvgElement("rect", { x: "3", y: "12", width: "18", height: "6", rx: "1" });
+  rect2.setAttribute("opacity", "0.4");
+  svg.appendChild(rect2);
+  return svg;
+}
+function createCollapseIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "m7 20 5-5 5 5" }));
+  svg.appendChild(createSvgElement("path", { d: "m7 4 5 5 5-5" }));
+  return svg;
+}
+function createExpandIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "m7 15 5 5 5-5" }));
+  svg.appendChild(createSvgElement("path", { d: "m7 9 5-5 5 5" }));
+  return svg;
+}
+function createUndoIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "M3 7v6h6" }));
+  svg.appendChild(createSvgElement("path", { d: "M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" }));
+  return svg;
+}
+function createRedoIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "M21 7v6h-6" }));
+  svg.appendChild(createSvgElement("path", { d: "M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7" }));
+  return svg;
+}
+function createRefreshIcon(options = {}) {
+  const svg = createBaseSvg(options);
+  svg.appendChild(createSvgElement("path", { d: "M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" }));
+  svg.appendChild(createSvgElement("path", { d: "M3 3v5h5" }));
+  svg.appendChild(createSvgElement("path", { d: "M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16" }));
+  svg.appendChild(createSvgElement("path", { d: "M16 21h5v-5" }));
+  return svg;
+}
+function createExternalLinkIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 16, height: (_b = options.height) != null ? _b : 16 });
+  svg.appendChild(createSvgElement("path", { d: "M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" }));
+  svg.appendChild(createSvgElement("polyline", { points: "15 3 21 3 21 9" }));
+  svg.appendChild(createSvgElement("line", { x1: "10", y1: "14", x2: "21", y2: "3" }));
+  return svg;
+}
+function createXIcon(options = {}) {
+  var _a, _b;
+  const svg = createBaseSvg({ ...options, width: (_a = options.width) != null ? _a : 16, height: (_b = options.height) != null ? _b : 16 });
+  svg.appendChild(createSvgElement("line", { x1: "18", y1: "6", x2: "6", y2: "18" }));
+  svg.appendChild(createSvgElement("line", { x1: "6", y1: "6", x2: "18", y2: "18" }));
+  return svg;
+}
+function createRunaloneLogo() {
+  const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg.setAttribute("width", "20");
+  svg.setAttribute("height", "20");
+  svg.setAttribute("viewBox", "0 0 100 100");
+  svg.setAttribute("fill", "#8b5cf6");
+  svg.setAttribute("stroke", "#8b5cf6");
+  svg.setAttribute("class", "toolbar-logo-svg");
+  svg.appendChild(createSvgElement("circle", { cx: "50", cy: "40", r: "22" }));
+  const eye1 = createSvgElement("circle", { cx: "42", cy: "38", r: "3" });
+  eye1.setAttribute("fill", "#ffffff");
+  svg.appendChild(eye1);
+  const eye2 = createSvgElement("circle", { cx: "58", cy: "38", r: "3" });
+  eye2.setAttribute("fill", "#ffffff");
+  svg.appendChild(eye2);
+  const tentacles = [
+    "M35 58 C25 65, 25 80, 35 85",
+    "M45 60 C40 70, 42 85, 45 90",
+    "M50 60 C50 72, 50 85, 50 92",
+    "M55 60 C58 70, 58 85, 55 90",
+    "M65 58 C75 65, 75 80, 65 85"
+  ];
+  tentacles.forEach((d) => {
+    const path = createSvgElement("path", { d });
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke-width", "6");
+    path.setAttribute("stroke-linecap", "round");
+    svg.appendChild(path);
+  });
+  return svg;
+}
+
 // src/ui/KanbanRenderer.ts
 var STATUS_CONFIG = [
   { status: "pending", title: "To Do", color: "#6b7280" },
@@ -2221,8 +2373,7 @@ var KanbanRenderer = class {
     const header = document.createElement("div");
     header.className = "kanban-header";
     const dot = document.createElement("span");
-    dot.className = "kanban-dot";
-    dot.style.backgroundColor = config.color;
+    dot.className = `kanban-dot kanban-dot-${config.status}`;
     header.appendChild(dot);
     const title = document.createElement("span");
     title.className = "kanban-title";
@@ -2263,7 +2414,11 @@ var KanbanRenderer = class {
     const titleEl = document.createElement("div");
     titleEl.className = "kanban-card-title";
     if (task.isMilestone) {
-      titleEl.innerHTML = `<span class="milestone-icon">&#9670;</span> ${task.title}`;
+      const milestoneIcon = document.createElement("span");
+      milestoneIcon.className = "milestone-icon";
+      milestoneIcon.textContent = "\u25C6";
+      titleEl.appendChild(milestoneIcon);
+      titleEl.appendChild(document.createTextNode(task.title));
     } else {
       titleEl.textContent = task.title;
     }
@@ -2272,18 +2427,20 @@ var KanbanRenderer = class {
     meta.className = "kanban-meta";
     const duration = document.createElement("span");
     duration.className = "kanban-meta-item";
-    duration.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> ${task.duration}d`;
+    duration.appendChild(createClockIcon());
+    duration.appendChild(document.createTextNode(` ${task.duration}d`));
     meta.appendChild(duration);
     if (task.dependencies.length > 0) {
       const deps = document.createElement("span");
       deps.className = "kanban-meta-item";
-      deps.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> ${task.dependencies.length}`;
+      deps.appendChild(createLinkIcon());
+      deps.appendChild(document.createTextNode(` ${task.dependencies.length}`));
       meta.appendChild(deps);
     }
     card.appendChild(meta);
     if (task.color) {
-      card.style.borderLeftColor = task.color;
-      card.style.borderLeftWidth = "4px";
+      card.classList.add("has-custom-color");
+      card.style.setProperty("--task-color", task.color);
     }
     card.addEventListener("dragstart", (e) => {
       this.draggedTaskId = task.id;
@@ -2644,19 +2801,14 @@ var Toolbar = class {
   }
   renderLogo(container) {
     const logo = container.createDiv({ cls: "toolbar-logo" });
-    logo.innerHTML = `
-			<svg width="20" height="20" viewBox="0 0 100 100" fill="#8b5cf6" stroke="#8b5cf6">
-				<circle cx="50" cy="40" r="22"/>
-				<circle cx="42" cy="38" r="3" fill="#ffffff"/>
-				<circle cx="58" cy="38" r="3" fill="#ffffff"/>
-				<path d="M35 58 C25 65, 25 80, 35 85" fill="none" stroke-width="6" stroke-linecap="round"/>
-				<path d="M45 60 C40 70, 42 85, 45 90" fill="none" stroke-width="6" stroke-linecap="round"/>
-				<path d="M50 60 C50 72, 50 85, 50 92" fill="none" stroke-width="6" stroke-linecap="round"/>
-				<path d="M55 60 C58 70, 58 85, 55 90" fill="none" stroke-width="6" stroke-linecap="round"/>
-				<path d="M65 58 C75 65, 75 80, 65 85" fill="none" stroke-width="6" stroke-linecap="round"/>
-			</svg>
-			<span><strong>Runalone</strong> Project Manager</span>
-		`;
+    logo.appendChild(createRunaloneLogo());
+    const textSpan = document.createElement("span");
+    textSpan.className = "toolbar-logo-text";
+    const strong = document.createElement("strong");
+    strong.textContent = "Runalone";
+    textSpan.appendChild(strong);
+    textSpan.appendChild(document.createTextNode(" Project Manager"));
+    logo.appendChild(textSpan);
   }
   renderViewToggle(container, currentMode) {
     const toggle = container.createDiv({ cls: "view-toggle" });
@@ -2664,7 +2816,7 @@ var Toolbar = class {
       cls: "view-tab" + (currentMode === "gantt" ? " active" : ""),
       attr: { title: "Timeline" }
     });
-    timelineBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="16" height="4" rx="1"/><rect x="5" y="10" width="10" height="4" rx="1"/><rect x="3" y="16" width="13" height="4" rx="1"/></svg>`;
+    timelineBtn.appendChild(createTimelineIcon());
     timelineBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onViewModeChange("gantt");
@@ -2673,7 +2825,7 @@ var Toolbar = class {
       cls: "view-tab" + (currentMode === "kanban" ? " active" : ""),
       attr: { title: "Kanban" }
     });
-    kanbanBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="5" height="16" rx="1"/><rect x="10" y="3" width="5" height="10" rx="1"/><rect x="17" y="3" width="5" height="6" rx="1"/></svg>`;
+    kanbanBtn.appendChild(createKanbanIcon());
     kanbanBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onViewModeChange("kanban");
@@ -2684,7 +2836,7 @@ var Toolbar = class {
       cls: "toolbar-button",
       attr: { title: "New Project" }
     });
-    projectBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13c0 1.1.9 2 2 2Z"/><line x1="12" y1="10" x2="12" y2="16"/><line x1="9" y1="13" x2="15" y2="13"/></svg>`;
+    projectBtn.appendChild(createFolderPlusIcon());
     projectBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onAddProject();
@@ -2693,7 +2845,7 @@ var Toolbar = class {
       cls: "toolbar-button",
       attr: { title: "Add Task" }
     });
-    taskBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+    taskBtn.appendChild(createPlusIcon());
     taskBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onAddTask();
@@ -2704,7 +2856,7 @@ var Toolbar = class {
       cls: "toolbar-button" + (projectsOnly ? " is-active" : ""),
       attr: { title: "Projects Only" }
     });
-    projectsBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="6" rx="1"/><rect x="3" y="12" width="18" height="6" rx="1" opacity="0.4"/></svg>`;
+    projectsBtn.appendChild(createProjectsOnlyIcon());
     projectsBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onToggleProjectsOnly();
@@ -2713,7 +2865,7 @@ var Toolbar = class {
       cls: "toolbar-button",
       attr: { title: "Collapse All" }
     });
-    collapseBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 20 5-5 5 5"/><path d="m7 4 5 5 5-5"/></svg>`;
+    collapseBtn.appendChild(createCollapseIcon());
     collapseBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onCollapseAll();
@@ -2722,7 +2874,7 @@ var Toolbar = class {
       cls: "toolbar-button",
       attr: { title: "Expand All" }
     });
-    expandBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>`;
+    expandBtn.appendChild(createExpandIcon());
     expandBtn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onExpandAll();
@@ -2733,7 +2885,7 @@ var Toolbar = class {
       cls: `toolbar-button${this.canUndo ? "" : " is-disabled"}`,
       attr: { title: "Undo" }
     });
-    undoBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>`;
+    undoBtn.appendChild(createUndoIcon());
     undoBtn.onclick = () => {
       var _a;
       return this.canUndo && ((_a = this.callbacks) == null ? void 0 : _a.onUndo());
@@ -2742,7 +2894,7 @@ var Toolbar = class {
       cls: `toolbar-button${this.canRedo ? "" : " is-disabled"}`,
       attr: { title: "Redo" }
     });
-    redoBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 7v6h-6"/><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"/></svg>`;
+    redoBtn.appendChild(createRedoIcon());
     redoBtn.onclick = () => {
       var _a;
       return this.canRedo && ((_a = this.callbacks) == null ? void 0 : _a.onRedo());
@@ -2753,7 +2905,7 @@ var Toolbar = class {
       cls: "toolbar-button",
       attr: { title: "Refresh" }
     });
-    btn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>`;
+    btn.appendChild(createRefreshIcon());
     btn.onclick = () => {
       var _a;
       return (_a = this.callbacks) == null ? void 0 : _a.onRefresh();
@@ -2894,45 +3046,43 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
       cls: "note-search-input"
     });
     noteInput.value = this.result.linkedNote || "";
-    const suggestionContainer = noteInputContainer.createDiv({ cls: "note-suggestions" });
-    suggestionContainer.style.display = "none";
+    const suggestionContainer = noteInputContainer.createDiv({ cls: "note-suggestions is-hidden" });
     const allFiles = this.app.vault.getMarkdownFiles();
     noteInput.addEventListener("input", () => {
       const query = noteInput.value.toLowerCase();
       this.result.linkedNote = noteInput.value || void 0;
       if (query.length < 1) {
-        suggestionContainer.style.display = "none";
+        suggestionContainer.addClass("is-hidden");
         return;
       }
       const matches = allFiles.filter((f) => f.basename.toLowerCase().includes(query)).slice(0, 5);
       suggestionContainer.empty();
       if (matches.length > 0) {
-        suggestionContainer.style.display = "block";
+        suggestionContainer.removeClass("is-hidden");
         for (const file of matches) {
           const item = suggestionContainer.createDiv({ cls: "note-suggestion-item" });
           item.textContent = file.basename;
           item.addEventListener("click", () => {
             noteInput.value = file.basename;
             this.result.linkedNote = file.basename;
-            suggestionContainer.style.display = "none";
+            suggestionContainer.addClass("is-hidden");
             this.updateOpenNoteButton(openBtn, noteInput.value);
           });
         }
       } else {
-        suggestionContainer.style.display = "none";
+        suggestionContainer.addClass("is-hidden");
       }
     });
     noteInput.addEventListener("blur", () => {
       setTimeout(() => {
-        suggestionContainer.style.display = "none";
+        suggestionContainer.addClass("is-hidden");
       }, 200);
     });
     const openBtn = noteInputContainer.createEl("button", {
-      cls: "note-open-btn",
+      cls: "note-open-btn" + (this.result.linkedNote ? "" : " is-hidden"),
       attr: { title: "Open linked note" }
     });
-    openBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>`;
-    openBtn.style.display = this.result.linkedNote ? "" : "none";
+    openBtn.appendChild(createExternalLinkIcon());
     openBtn.addEventListener("click", (e) => {
       e.preventDefault();
       this.openLinkedNote();
@@ -2941,7 +3091,7 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
       cls: "note-clear-btn",
       attr: { title: "Clear linked note" }
     });
-    clearBtn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+    clearBtn.appendChild(createXIcon());
     clearBtn.addEventListener("click", (e) => {
       e.preventDefault();
       noteInput.value = "";
@@ -2950,8 +3100,7 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
     });
     const buttonContainer = contentEl.createDiv({ cls: "project-edit-buttons" });
     if (this.onDelete) {
-      const deleteBtn = buttonContainer.createEl("button", { text: "Delete Project", cls: "mod-warning" });
-      deleteBtn.style.marginRight = "auto";
+      const deleteBtn = buttonContainer.createEl("button", { text: "Delete Project", cls: "mod-warning project-delete-btn" });
       deleteBtn.addEventListener("click", () => {
         if (confirm(`Delete project "${this.project.name}" and all its tasks?`)) {
           this.onDelete();
@@ -2990,7 +3139,11 @@ var ProjectEditModal = class extends import_obsidian3.Modal {
     }
   }
   updateOpenNoteButton(btn, value) {
-    btn.style.display = value ? "" : "none";
+    if (value) {
+      btn.removeClass("is-hidden");
+    } else {
+      btn.addClass("is-hidden");
+    }
   }
   onClose() {
     const { contentEl } = this;
@@ -3814,9 +3967,8 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
     );
     containerEl.createEl("h3", { text: "Syntax Reference" });
     const syntaxHelp = containerEl.createDiv({ cls: "setting-item-description" });
-    syntaxHelp.innerHTML = `
-			<pre style="background: var(--background-secondary); padding: 10px; border-radius: 4px; font-size: 12px;">
-# Project Title
+    const pre = syntaxHelp.createEl("pre", { cls: "syntax-reference-pre" });
+    pre.textContent = `# Project Title
 @start: 2025-02-01
 
 ## Project Name
@@ -3828,9 +3980,7 @@ var TimelineGanttSettingsTab = class extends import_obsidian5.PluginSettingTab {
 > Done task (2) @done            # Completed (green)
 > In progress (3) @progress      # In progress (blue)
 > Cancelled (2) @cancelled       # Cancelled (grey)
-> Custom color (3) @color:ff6b6b
-			</pre>
-		`;
+> Custom color (3) @color:ff6b6b`;
   }
 };
 

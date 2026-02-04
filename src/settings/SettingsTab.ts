@@ -163,9 +163,8 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 		containerEl.createEl('h3', { text: 'Syntax Reference' });
 
 		const syntaxHelp = containerEl.createDiv({ cls: 'setting-item-description' });
-		syntaxHelp.innerHTML = `
-			<pre style="background: var(--background-secondary); padding: 10px; border-radius: 4px; font-size: 12px;">
-# Project Title
+		const pre = syntaxHelp.createEl('pre', { cls: 'syntax-reference-pre' });
+		pre.textContent = `# Project Title
 @start: 2025-02-01
 
 ## Project Name
@@ -177,8 +176,6 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 > Done task (2) @done            # Completed (green)
 > In progress (3) @progress      # In progress (blue)
 > Cancelled (2) @cancelled       # Cancelled (grey)
-> Custom color (3) @color:ff6b6b
-			</pre>
-		`;
+> Custom color (3) @color:ff6b6b`;
 	}
 }

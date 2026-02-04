@@ -1,7 +1,7 @@
 {
-	"name": "obsidian-timeline-gantt",
+	"name": "runalone-project-manager",
 	"version": "1.0.0",
-	"description": "Visual project management with interactive Gantt timeline",
+	"description": "A minimalist project management tool designed for solo builders.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
