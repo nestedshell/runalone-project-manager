@@ -39,10 +39,6 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 		containerEl.empty();
 
 		new Setting(containerEl)
-			.setName('General')
-			.setHeading();
-
-		new Setting(containerEl)
 			.setName('Projects file path')
 			.setDesc('Path to the markdown file containing your projects (relative to vault root)')
 			.addText((text) =>
@@ -170,10 +166,10 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 
 		const syntaxHelp = containerEl.createDiv({ cls: 'setting-item-description' });
 		const pre = syntaxHelp.createEl('pre', { cls: 'syntax-reference-pre' });
-		pre.textContent = `# Project Title
+		pre.textContent = `# Project title
 @start: 2025-02-01
 
-## Project Name
+## Project name
 > Task name (5)                  # 5 days duration
 > Task 2 (3) @after:1            # Depends on task 1
 >> Subtask (2)                   # Child task (sequential by default)
