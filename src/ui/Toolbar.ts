@@ -88,7 +88,7 @@ export class Toolbar {
 		const strong = document.createElement('strong');
 		strong.textContent = 'Runalone';
 		textSpan.appendChild(strong);
-		textSpan.appendChild(document.createTextNode(' Project Manager'));
+		textSpan.appendChild(document.createTextNode(' project manager'));
 		logo.appendChild(textSpan);
 	}
 
