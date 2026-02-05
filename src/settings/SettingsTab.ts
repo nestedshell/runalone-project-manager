@@ -40,7 +40,7 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 
 		new Setting(containerEl)
 			.setName('Projects file path')
-			.setDesc('Path to the markdown file containing your projects (relative to vault root)')
+			.setDesc('Path to the Markdown file containing your projects (relative to vault root)')
 			.addText((text) =>
 				text
 					.setPlaceholder('Projects.md')
@@ -166,18 +166,18 @@ export class TimelineGanttSettingsTab extends PluginSettingTab {
 
 		const syntaxHelp = containerEl.createDiv({ cls: 'setting-item-description' });
 		const pre = syntaxHelp.createEl('pre', { cls: 'syntax-reference-pre' });
-		pre.textContent = `# Project title
+		pre.textContent = `# project title
 @start: 2025-02-01
 
-## Project name
-> Task name (5)                  # 5 days duration
-> Task 2 (3) @after:1            # Depends on task 1
->> Subtask (2)                   # Child task (sequential by default)
-> With date (3) @start:2025-03-01  # Custom start date
-> Milestone (1) @milestone
-> Done task (2) @done            # Completed (green)
-> In progress (3) @progress      # In progress (blue)
-> Cancelled (2) @cancelled       # Cancelled (grey)
-> Custom color (3) @color:ff6b6b`;
+## project name
+> task name (5)                  # 5 days duration
+> task 2 (3) @after:1            # depends on task 1
+>> subtask (2)                   # child task (sequential by default)
+> with date (3) @start:2025-03-01  # custom start date
+> milestone (1) @milestone
+> done task (2) @done            # completed (green)
+> in progress (3) @progress      # in progress (blue)
+> cancelled (2) @cancelled       # cancelled (grey)
+> custom color (3) @color:ff6b6b`;
 	}
 }
